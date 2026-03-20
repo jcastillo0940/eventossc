@@ -82,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/events/{event}/print-ballots', [BallotController::class, 'print'])->name('admin.ballots.print');
         Route::get('/admin/events/{event}/control-tarima', \App\Livewire\Admin\TarimaControl::class)->name('admin.tarima.control');
         Route::get('/admin/events/{event}/tarima-settings', \App\Livewire\Admin\TarimaSettings::class)->name('admin.tarima.settings');
+        Route::get('/admin/events/{event}/gallery', \App\Livewire\Admin\EventGallery::class)->name('admin.events.gallery');
         Route::get('/admin/ceremonia', \App\Livewire\Admin\TarimaIndex::class)->name('admin.tarima.index');
     });
 
@@ -89,6 +90,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:Digitador|SuperAdmin'])->group(function () {
         Route::get('/digitizer', [DigitizerController::class, 'index'])->name('digitizer.index');
         Route::get('/digitizer/details', [DigitizerController::class, 'getCategoryDetails']);
+        Route::get('/digitizer/check-existing', [DigitizerController::class, 'checkExisting']);
         Route::get('/digitizer/categories/{category}/criteria', [DigitizerController::class, 'getCriteria']);
         Route::post('/digitizer', [DigitizerController::class, 'store']);
     });

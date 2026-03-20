@@ -48,7 +48,7 @@ class DigitizerController extends Controller
             'judge_id' => 'required|exists:users,id',
             'scores' => 'required|array',
             'scores.*.criterion_id' => 'required|exists:criteria,id',
-            'scores.*.score' => 'required|integer|min:0'
+            'scores.*.score' => 'required|numeric|min:0|max:5'
         ]);
 
         try {
@@ -64,10 +64,32 @@ class DigitizerController extends Controller
             $dto = ScoreSubmissionDTO::fromRequest($data);
             $this->scoreService->saveScores($dto);
 
-            return response()->json(['message' => 'Calificación guardada exitosamente.']);
+            return response()->json(['message' => 'La papeleta fue registrada satisfactoriamente.', 'id' => uniqid('P-')]);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 422);
         }
+    }
+
+    public function checkExisting(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'event_id' => 'required',
+            'category_id' => 'required',
+            'participant_id' => 'required',
+            'judge_id' => 'required',
+        ]);
+
+        $scores = \App\Models\Score::where([
+            'event_id' => $validated['event_id'],
+            'category_id' => $validated['category_id'],
+            'participant_id' => $validated['participant_id'],
+            'judge_id' => $validated['judge_id'],
+        ])->get();
+
+        return response()->json([
+            'exists' => $scores->isNotEmpty(),
+            'scores' => $scores->pluck('score', 'criterion_id')
+        ]);
     }
 
     public function getCategoryDetails(Request $request): JsonResponse

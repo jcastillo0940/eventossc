@@ -33,19 +33,23 @@
                     </button>
                 </div>
 
-                <div class="w-20 h-20 rounded-[2rem] bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden mb-6 p-2">
+                <div class="w-20 h-20 rounded-[2rem] bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden mb-6 p-4">
                     @if($brand->logo_path)
-                        <img src="{{ Storage::url($brand->logo_path) }}" class="w-full h-full object-contain">
+                        <img src="{{ $brand->logo_path }}" class="w-full h-full object-contain">
                     @else
-                        <span class="text-slate-200 font-black text-xs italic italic">LOGO</span>
+                        <span class="text-slate-200 font-black text-[9px] italic italic">LOGO</span>
                     @endif
                 </div>
 
                 <h3 class="text-lg font-black text-slate-900 uppercase italic italic tracking-tight mb-1">{{ $brand->name }}</h3>
                 <span class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Orden: {{ $brand->order }}</span>
-                <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded italic italic font-bold mb-6 truncate max-w-full">
-                    {{ $brand->event->name }}
-                </span>
+                
+                <div class="flex flex-wrap justify-center gap-1 mb-6">
+                    @php $count = $brand->events->count(); @endphp
+                    <span class="text-[9px] font-black {{ $count > 0 ? 'bg-sky-100 text-sky-600' : 'bg-slate-100 text-slate-400' }} px-3 py-1 rounded-full uppercase tracking-widest">
+                        {{ $count }} {{ Str::plural('Evento', $count) }}
+                    </span>
+                </div>
 
                 <div class="w-full h-[1px] bg-slate-100 mb-6"></div>
                 <div class="flex gap-4 w-full">

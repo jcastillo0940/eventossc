@@ -166,7 +166,7 @@
         <div class="flex animate-ticker pl-48 items-center h-full">
             @for ($i = 0; $i < 3; $i++)
                 <div class="flex items-center gap-24 px-12 shrink-0">
-                    @foreach($event->brands as $brand)
+                    @foreach($active_brands as $brand)
                         {{-- fix: logo_path contains the URL --}}
                         <img src="{{ $brand->logo_path }}" 
                              alt="{{ $brand->name }}"

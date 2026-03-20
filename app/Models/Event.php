@@ -37,9 +37,9 @@ class Event extends Model implements HasMedia
         return $this->hasMany(EventSetting::class);
     }
 
-    public function brands(): HasMany
+    public function brands(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(Brand::class);
+        return $this->belongsToMany(Brand::class);
     }
 
     public function participants(): HasMany

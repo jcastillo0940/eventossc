@@ -14,7 +14,6 @@ class Brand extends Model implements HasMedia
     use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
-        'event_id',
         'name',
         'logo_path',
         'order',
@@ -25,8 +24,8 @@ class Brand extends Model implements HasMedia
         'is_active' => 'boolean',
     ];
 
-    public function event(): BelongsTo
+    public function events(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsToMany(Event::class);
     }
 }

@@ -13,10 +13,12 @@ class PantallaGigante extends Component
     public $ranking;
     public array $revealed = [];
     public array $visuals = [];
+    public $active_brands;
 
     public function mount(Event $event, RankingService $service)
     {
         $this->event = $event;
+        $this->active_brands = $event->brands()->where('is_active', true)->orderBy('order')->get();
         $this->loadData($service);
         $this->loadVisuals();
     }

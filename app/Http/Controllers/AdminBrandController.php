@@ -12,7 +12,7 @@ class AdminBrandController extends Controller
 {
     public function index(): View
     {
-        $brands = Brand::with('event')->orderBy('order')->get();
+        $brands = Brand::with('events')->orderBy('order')->get();
         return view('admin.brands.index', compact('brands'));
     }
 
@@ -25,18 +25,20 @@ class AdminBrandController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'event_id' => 'required|exists:events,id',
+            'event_ids' => 'required|array',
+            'event_ids.*' => 'exists:events,id',
             'name' => 'required|string|max:255',
             'order' => 'integer',
             'logo' => 'nullable|image|max:2048',
         ]);
 
         $brand = Brand::create([
-            'event_id' => $validated['event_id'],
             'name' => $validated['name'],
             'order' => $validated['order'] ?? 0,
             'is_active' => $request->has('is_active'),
         ]);
+
+        $brand->events()->sync($validated['event_ids']);
 
         if ($request->hasFile('logo')) {
             $brand->addMediaFromRequest('logo')->toMediaCollection('logo');
@@ -55,18 +57,20 @@ class AdminBrandController extends Controller
     public function update(Request $request, Brand $brand): RedirectResponse
     {
         $validated = $request->validate([
-            'event_id' => 'required|exists:events,id',
+            'event_ids' => 'required|array',
+            'event_ids.*' => 'exists:events,id',
             'name'     => 'required|string|max:255',
             'order'    => 'integer',
             'logo'     => 'nullable|image|max:2048',
         ]);
 
         $brand->update([
-            'event_id'  => $validated['event_id'],
             'name'      => $validated['name'],
             'order'     => $validated['order'] ?? $brand->order,
             'is_active' => $request->has('is_active'),
         ]);
+
+        $brand->events()->sync($validated['event_ids']);
 
         if ($request->hasFile('logo')) {
             $brand->clearMediaCollection('logo');
