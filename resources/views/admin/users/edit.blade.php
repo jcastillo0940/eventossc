@@ -1,0 +1,75 @@
+@extends('layouts.admin')
+
+@section('title', 'Editar Usuario')
+@section('header_title', 'Editar Staff')
+
+@section('content')
+    <div class="mb-12 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-black text-slate-900 uppercase italic italic">Editar <span class="text-sky-500">Staff</span></h1>
+            <p class="text-slate-500 font-medium italic italic">Actualice los datos del usuario administrativo.</p>
+        </div>
+        <a href="{{ route('admin.users.index') }}" class="text-slate-400 font-black uppercase text-xs tracking-widest hover:text-slate-600 transition italic italic">← Volver</a>
+    </div>
+
+    @if($errors->any())
+        <div class="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-2xl mb-8 font-bold italic italic text-sm">
+            <ul class="list-disc list-inside space-y-1">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('admin.users.update', $user) }}" method="POST" class="space-y-10 max-w-2xl mx-auto">
+        @csrf
+        @method('PUT')
+
+        <div class="dashboard-card p-10 space-y-8">
+            <div class="space-y-2">
+                <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Nombre Completo</label>
+                <input type="text" name="name" required value="{{ old('name', $user->name) }}"
+                       class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all italic italic font-medium">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Email de Acceso</label>
+                <input type="email" name="email" required value="{{ old('email', $user->email) }}"
+                       class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all italic italic font-medium">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Nueva Contraseña <span class="normal-case text-slate-300">(dejar vacío para no cambiar)</span></label>
+                <input type="password" name="password"
+                       class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all italic italic font-medium">
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Rol en el Sistema</label>
+                <select name="role" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all italic italic font-medium">
+                    @foreach($roles as $role)
+                        <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
+                            {{ $role->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="flex items-center justify-between p-6 rounded-2xl bg-slate-50/50 border border-slate-100">
+                <span class="text-sm font-black text-slate-800 uppercase italic italic">Usuario Activo</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name="is_active" value="1" class="sr-only peer" {{ $user->is_active ? 'checked' : '' }}>
+                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                </label>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-6">
+            <a href="{{ route('admin.users.index') }}" class="text-slate-400 font-black uppercase text-xs tracking-widest hover:text-slate-600 transition italic italic">Cancelar</a>
+            <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition shadow-xl shadow-slate-400/20 italic italic">
+                Guardar Cambios
+            </button>
+        </div>
+    </form>
+@endsection
