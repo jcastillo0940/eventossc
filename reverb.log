@@ -1,0 +1,8 @@
+nohup: ignoring input
+
+In TcpServer.php line 188:
+                                                                               
+  Failed to listen on "tcp://0.0.0.0:8080": Address already in use (EADDRINUS  
+  E)                                                                           
+                                                                               
+

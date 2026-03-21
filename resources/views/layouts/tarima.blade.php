@@ -8,9 +8,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #020617; 
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #020617;
             color: #ffffff;
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
@@ -53,18 +53,17 @@
         window.Pusher = Pusher;
         window.Echo = new Echo({
             broadcaster: 'reverb',
-            key: '{{ env('REVERB_APP_KEY') }}',
-            wsHost: '{{ env('REVERB_HOST') }}',
-            wsPort: {{ env('REVERB_PORT', 8080) }},
-            forceTLS: false,
+            key: '{{ config('broadcasting.connections.reverb.key') }}',
+            wsHost: '{{ config('broadcasting.connections.reverb.options.host') }}',
+            wsPort: 443,
+            wssPort: 443,
+            forceTLS: true,
             enabledTransports: ['ws', 'wss'],
         });
     </script>
 </head>
 <body class="bg-gradient-tarima min-h-screen flex items-center justify-center p-0 m-0 cursor-none">
-    
     {{ $slot }}
-
     @livewireScripts
     @stack('scripts')
 </body>

@@ -3,58 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Eventos Pro')</title>
-    <!-- Google Fonts: Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
+    <title>@yield('title', 'Eventos Super Carnes')</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Fingerprint JS for Voting -->
     <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
-    
-    <style>
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #0f172a; 
-            color: #f8fafc;
-            scroll-behavior: smooth;
-        }
-        .glass { 
-            background: rgba(30, 41, 59, 0.7); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-        }
-        .text-gradient {
-            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.4);
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-        @keyframes toast-in  { from { opacity:0; transform: translateX(110%) scale(.9); } to { opacity:1; transform: translateX(0) scale(1); } }
-        @keyframes toast-out { from { opacity:1; transform: translateX(0) scale(1);   } to { opacity:0; transform: translateX(110%) scale(.9); } }
+    <style>
+        :root {
+            --sc-blue:   #1A6FBF;
+            --sc-yellow: #F5C400;
+            --sc-cream:  #F0EDE8;
+            --sc-dark:   #0d3a6e;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--sc-cream);
+            color: #1e293b;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Glassmorphism al estilo Super Carnes (fondo claro) */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .glass-dark {
+            background: rgba(13, 58, 110, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--sc-cream); }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--sc-blue); }
+
+        /* Toast animations */
+        @keyframes toast-in  { from { opacity:0; transform: translateX(110%) scale(.95); } to { opacity:1; transform: translateX(0) scale(1); } }
+        @keyframes toast-out { from { opacity:1; transform: translateX(0) scale(1); } to { opacity:0; transform: translateX(110%) scale(.95); } }
         .toast-enter { animation: toast-in  0.35s cubic-bezier(.22,1,.36,1) forwards; }
         .toast-leave  { animation: toast-out 0.3s ease-in forwards; }
         @keyframes shrink { from { width: 100%; } to { width: 0%; } }
         .toast-progress { animation: shrink linear forwards; }
     </style>
+
     @stack('styles')
     @livewireStyles
 </head>
 <body class="antialiased overflow-x-hidden">
 
-    {{-- GLOBAL TOAST SYSTEM --}}
+    {{-- ===================== TOAST SYSTEM ===================== --}}
     <div
         x-data="toastManager()"
         x-init="init()"
@@ -65,10 +72,10 @@
             <div
                 class="pointer-events-auto flex items-start gap-4 px-5 py-4 rounded-2xl shadow-2xl border backdrop-blur-sm"
                 :class="{
-                    'bg-white/95 border-emerald-100': toast.type === 'success',
-                    'bg-white/95 border-red-100':     toast.type === 'error',
-                    'bg-white/95 border-amber-100':   toast.type === 'warning',
-                    'bg-white/95 border-sky-100':     toast.type === 'info'
+                    'bg-white border-emerald-100': toast.type === 'success',
+                    'bg-white border-red-100':     toast.type === 'error',
+                    'bg-white border-amber-100':   toast.type === 'warning',
+                    'bg-white border-sky-100':     toast.type === 'info'
                 }"
                 :id="'toast-' + toast.id"
             >
@@ -80,9 +87,9 @@
                         'bg-sky-100':     toast.type === 'info'
                      }">
                     <svg x-show="toast.type === 'success'" class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                    <svg x-show="toast.type === 'error'" class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
-                    <svg x-show="toast.type === 'warning'" class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-                    <svg x-show="toast.type === 'info'" class="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg x-show="toast.type === 'error'"   class="w-5 h-5 text-red-500"     fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <svg x-show="toast.type === 'warning'" class="w-5 h-5 text-amber-500"   fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                    <svg x-show="toast.type === 'info'"    class="w-5 h-5 text-sky-500"     fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
 
                 <div class="flex-1 min-w-0">
@@ -121,37 +128,70 @@
         <script>document.addEventListener('alpine:init', () => { setTimeout(() => window.$toast?.error(@json(session('error'))), 100); })</script>
     @endif
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass border-b border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <a href="{{ route('home') }}" class="text-2xl font-black italic tracking-tighter text-white">
-                    PRO<span class="text-sky-400">EVENTS</span>
-                </a>
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('home') }}#upcoming" class="text-sm font-semibold hover:text-sky-400 transition-colors">Eventos</a>
-                    @auth
-                        <a href="{{ route('admin.dashboard') }}" class="text-sm font-semibold bg-slate-800 px-4 py-2 rounded-lg hover:bg-slate-700 transition">Panel</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm font-semibold hover:text-sky-400 transition-colors">Acceso</a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="pt-16">
+    {{-- ===================== CONTENIDO ===================== --}}
+    <div>
         {{ $slot ?? '' }}
         @yield('content')
     </div>
 
-    <footer class="bg-slate-900 border-t border-slate-800 py-12 mt-20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-slate-500 text-sm italic mb-4 font-bold tracking-widest">PROVENTS SYSTEM &copy; 2026</p>
-            <p class="text-slate-600 text-xs">Diseñado para la excelencia en competencias profesionales.</p>
+    {{-- ===================== FOOTER ===================== --}}
+    <footer style="background: var(--sc-blue);" class="mt-0">
+        <div class="max-w-7xl mx-auto px-4 py-14">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+
+                {{-- Logo y tagline --}}
+                <div class="flex flex-col items-center md:items-start gap-3">
+                    <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png"
+                         alt="Super Carnes"
+                         class="h-12 object-contain brightness-0 invert opacity-90">
+                    <p class="text-white/50 text-xs font-medium tracking-widest uppercase">
+                        Plataforma de Eventos y Competencias
+                    </p>
+                </div>
+
+                {{-- Links --}}
+                <div class="flex items-center gap-8">
+                    <a href="{{ route('home') }}" class="text-white/60 hover:text-white text-sm font-semibold transition-colors">
+                        Inicio
+                    </a>
+                    <a href="{{ route('home') }}#upcoming" class="text-white/60 hover:text-white text-sm font-semibold transition-colors">
+                        Eventos
+                    </a>
+                    @auth
+                        <a href="{{ route('admin.dashboard') }}" class="text-white/60 hover:text-white text-sm font-semibold transition-colors">
+                            Admin
+                        </a>
+                    @endauth
+                </div>
+
+                {{-- Copyright --}}
+                <div class="text-center md:text-right">
+                    <p class="text-white/40 text-xs font-medium">
+                        Super Carnes S.A. &copy; {{ date('Y') }}
+                    </p>
+                    <p class="text-white/30 text-xs mt-1">
+                        Todos los derechos reservados.
+                    </p>
+                </div>
+
+            </div>
+
+            {{-- Línea divisoria --}}
+            <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full animate-pulse" style="background: var(--sc-yellow);"></span>
+                    <span class="text-white/40 text-xs font-medium tracking-wider uppercase">
+                        Sistema de Eventos en Vivo
+                    </span>
+                </div>
+                <p class="text-white/20 text-xs">
+                    Powered by Super Carnes
+                </p>
+            </div>
         </div>
     </footer>
 
+    {{-- ===================== SCRIPTS ===================== --}}
     <script>
     function toastManager() {
         return {

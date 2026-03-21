@@ -1,91 +1,171 @@
 @extends('layouts.public')
 
-@section('title', 'Explora Próximos Eventos | ProEvents')
+@section('title', 'Eventos y Competencias | Super Carnes')
 
 @section('content')
+
     <!-- Hero Section -->
-    <section class="relative h-[80vh] flex items-center justify-center overflow-hidden bg-[#0f172a]">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 mix-blend-overlay"></div>
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-500 rounded-full blur-[120px] opacity-20 animate-pulse"></div>
-        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-500 rounded-full blur-[120px] opacity-20 animate-pulse delay-75"></div>
+    <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden" style="background: linear-gradient(135deg, #1A6FBF 0%, #0d4a8a 60%, #0a3a6e 100%);">
         
-        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-8xl font-black italic uppercase italic leading-tight text-white mb-6">
-                VIVE LA <span class="text-sky-400">EMOCIÓN</span> DE LOS EVENTOS <span class="text-indigo-400">PRO</span>
+        {{-- Blob decorativo amarillo --}}
+        <div class="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-20 blur-[80px]" style="background: #F5C400;"></div>
+        <div class="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full opacity-15 blur-[80px]" style="background: #F5C400;"></div>
+
+        {{-- Patrón de puntos sutil --}}
+        <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 32px 32px;"></div>
+
+        {{-- Logo Super Carnes watermark --}}
+        <div class="absolute top-8 left-8 z-10">
+            <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" 
+                 alt="Super Carnes" class="h-14 object-contain drop-shadow-lg opacity-90">
+        </div>
+
+        <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+            {{-- Badge --}}
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-black uppercase tracking-[0.3em] mb-8 border border-white/20"
+                 style="background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); color: #F5C400;">
+                <span class="w-2 h-2 rounded-full animate-pulse" style="background: #F5C400;"></span>
+                Eventos en Vivo
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-black uppercase leading-tight text-white mb-6 drop-shadow-lg">
+                Competencias <br>
+                <span style="color: #F5C400;">Super Carnes</span>
             </h1>
-            <p class="text-lg md:text-2xl text-slate-400 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
-                Descubre las competencias más impactantes del momento. Vota por tus favoritos en tiempo real y sé parte de la experiencia.
+            <p class="text-lg md:text-xl text-white/70 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+                Descubre nuestros eventos y competencias familiares. Vota por tus favoritos en tiempo real y vive la emoción junto a toda la familia.
             </p>
-            <div class="flex flex-col sm:flex-row gap-6 justify-center">
-                <a href="#upcoming" class="px-10 py-5 bg-white text-indigo-900 rounded-2xl font-bold text-lg hover:bg-sky-400 hover:text-white transition-all transform hover:scale-105 active:scale-95 shadow-xl shadow-sky-400/20">
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#upcoming" 
+                   class="px-10 py-4 rounded-2xl font-black text-base uppercase tracking-wider transition-all transform hover:scale-105 active:scale-95 shadow-2xl"
+                   style="background: #F5C400; color: #1A6FBF;">
                     Explorar Eventos
                 </a>
-                <a href="{{ route('login') }}" class="px-10 py-5 glass border border-slate-700 text-white rounded-2xl font-bold text-lg hover:backdrop-blur-xl transition-all transform hover:scale-105">
+                <a href="{{ route('login') }}" 
+                   class="px-10 py-4 rounded-2xl font-black text-base uppercase tracking-wider text-white border border-white/30 transition-all transform hover:scale-105 hover:bg-white/10"
+                   style="backdrop-filter: blur(12px);">
                     Soy Juez / Admin
                 </a>
             </div>
         </div>
+
+        {{-- Wave decorativa --}}
+        <div class="absolute bottom-0 left-0 right-0">
+            <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 80L1440 80L1440 30C1200 80 960 0 720 30C480 60 240 0 0 30L0 80Z" fill="#F0EDE8"/>
+            </svg>
+        </div>
     </section>
 
-    <!-- Upcoming Events Grid -->
-    <main id="upcoming" class="max-w-7xl mx-auto px-4 py-32 space-y-32">
-        <section>
-            <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
+    <!-- Main Content -->
+    <main id="upcoming" style="background: #F0EDE8;" class="px-4 py-24 space-y-24">
+
+        <!-- Próximos Eventos -->
+        <section class="max-w-7xl mx-auto">
+
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
                 <div>
-                    <span class="text-xs font-black uppercase tracking-[0.3em] text-sky-400 mb-2 block">PRÓXIMAS COMPETENCIAS</span>
-                    <h2 class="text-4xl md:text-5xl font-bold text-white tracking-tight">Vibrando con los <span class="italic underline decoration-sky-400">Próximos</span> Eventos</h2>
+                    <span class="text-xs font-black uppercase tracking-[0.3em] mb-2 block" style="color: #1A6FBF;">
+                        ● PRÓXIMAS COMPETENCIAS
+                    </span>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight leading-tight">
+                        ¡No te pierdas<br>
+                        <span style="color: #1A6FBF;">los próximos eventos!</span>
+                    </h2>
                 </div>
-                <div class="hidden md:block h-[1px] flex-grow mx-8 bg-slate-800"></div>
-                <div class="text-slate-500 font-medium">Actualizado: {{ now()->format('d/m/Y') }}</div>
+                <div class="text-slate-400 text-sm font-medium">
+                    Actualizado: {{ now()->format('d/m/Y') }}
+                </div>
             </div>
 
             @if($upcomingEvents->isEmpty())
-                <div class="glass p-12 rounded-[3rem] text-center border-dashed border-2 border-slate-700">
-                    <p class="text-slate-500 text-xl font-medium mb-8 italic italic">No hay eventos próximos en este momento. ¡Vuelve pronto!</p>
-                    <div class="w-24 h-24 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto">
-                        <svg class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <div class="rounded-[2.5rem] p-16 text-center border-2 border-dashed border-slate-300 bg-white/60"
+                     style="backdrop-filter: blur(12px);">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+                         style="background: #F5C400;">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
                     </div>
+                    <p class="text-slate-500 text-xl font-semibold">No hay eventos próximos en este momento.</p>
+                    <p class="text-slate-400 text-sm mt-2">¡Vuelve pronto para ver las nuevas competencias!</p>
                 </div>
+
             @else
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($upcomingEvents as $event)
-                        <div class="group glass rounded-[3rem] overflow-hidden hover:border-sky-400/50 transition-all duration-500 hover:-translate-y-4">
-                            <!-- Card Image -->
-                            <div class="relative h-64 overflow-hidden">
+                        <div class="group bg-white rounded-[2.5rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-white">
+                            
+                            {{-- Imagen --}}
+                            <div class="relative h-56 overflow-hidden">
                                 @if($event->banner_path)
-                                    <img src="{{ Storage::url($event->banner_path) }}" 
-                                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                                    <img src="{{ Storage::url($event->banner_path) }}"
+                                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                          alt="{{ $event->name }}">
                                 @else
-                                    <div class="w-full h-full bg-slate-800 flex items-center justify-center">
-                                        <span class="text-slate-600 font-black text-2xl uppercase italic italic tracking-wider">{{ $event->name }}</span>
+                                    <div class="w-full h-full flex items-center justify-center"
+                                         style="background: linear-gradient(135deg, #1A6FBF, #0d4a8a);">
+                                        <span class="text-white/30 font-black text-2xl uppercase">{{ $event->name }}</span>
                                     </div>
                                 @endif
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                                <div class="absolute top-6 right-6">
-                                    <div class="glass px-4 py-2 rounded-full text-xs font-black uppercase text-sky-400 tracking-widest border border-sky-400/30">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+
+                                {{-- Badge PRÓXIMO --}}
+                                <div class="absolute top-4 left-4">
+                                    <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white shadow-lg"
+                                          style="background: #1A6FBF; backdrop-filter: blur(8px);">
                                         PRÓXIMO
-                                    </div>
+                                    </span>
                                 </div>
+
+                                {{-- Logo del evento --}}
+                                @if($event->logo_path)
+                                    <div class="absolute bottom-4 right-4 w-12 h-12 rounded-2xl bg-white shadow-lg p-1.5">
+                                        <img src="{{ Storage::url($event->logo_path) }}" class="w-full h-full object-contain">
+                                    </div>
+                                @endif
                             </div>
 
-                            <!-- Card Content -->
-                            <div class="p-10 space-y-6">
-                                <div class="space-y-4">
-                                    <div class="flex items-center gap-3 text-sky-400">
-                                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                        <span class="text-sm font-bold uppercase tracking-widest">{{ $event->date->format('d M, Y') }} | {{ $event->date->format('H:i') }}</span>
+                            {{-- Contenido --}}
+                            <div class="p-8 space-y-5">
+                                {{-- Fecha --}}
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style="background: #F5C400;">
+                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
                                     </div>
-                                    <h3 class="text-3xl font-black text-white italic italic group-hover:text-sky-400 transition-colors">{{ $event->name }}</h3>
-                                    <div class="h-1 w-12 bg-indigo-500 rounded-full group-hover:w-24 transition-all duration-500"></div>
+                                    <span class="text-xs font-black uppercase tracking-widest text-slate-500">
+                                        {{ $event->date->format('d M, Y') }} · {{ $event->date->format('H:i') }}
+                                    </span>
                                 </div>
-                                <p class="text-slate-400 text-sm leading-relaxed line-clamp-3 font-medium">
-                                    {{ $event->description ?: 'No hay descripción disponible para este evento.' }}
+
+                                {{-- Nombre --}}
+                                <h3 class="text-2xl font-black text-slate-800 leading-tight group-hover:transition-colors" 
+                                    style="transition: color 0.3s;"
+                                    onmouseover="this.style.color='#1A6FBF'" 
+                                    onmouseout="this.style.color=''">
+                                    {{ $event->name }}
+                                </h3>
+
+                                {{-- Separador amarillo --}}
+                                <div class="h-1 w-10 rounded-full group-hover:w-20 transition-all duration-500"
+                                     style="background: #F5C400;"></div>
+
+                                {{-- Descripción --}}
+                                <p class="text-slate-500 text-sm leading-relaxed line-clamp-3">
+                                    {{ $event->description ?: 'Próximamente más detalles sobre este emocionante evento.' }}
                                 </p>
-                                <a href="{{ route('events.landing', $event->slug) }}" 
-                                   class="inline-flex items-center gap-4 bg-white text-indigo-900 px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-sky-400 hover:text-white transition-all transform group-hover:scale-105 active:scale-95 shadow-xl shadow-indigo-600/10">
+
+                                {{-- CTA --}}
+                                <a href="{{ route('events.landing', $event->slug) }}"
+                                   class="inline-flex items-center gap-3 px-7 py-3.5 rounded-2xl font-black text-sm uppercase tracking-wider text-white transition-all transform hover:scale-105 active:scale-95 shadow-lg w-full justify-center"
+                                   style="background: #1A6FBF;">
                                     Ver Evento
-                                    <svg class="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -94,51 +174,72 @@
             @endif
         </section>
 
-        <!-- Past Events Section -->
+        <!-- Eventos Pasados -->
         @if(!$pastEvents->isEmpty())
-        <section class="opacity-80 grayscale-[50%] hover:grayscale-0 transition-all duration-700">
-            <div class="flex items-center justify-between mb-12">
+        <section class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end gap-4 mb-12">
                 <div>
-                    <span class="text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-2 block font-bold">HISTORIAL DE COMPETENCIAS</span>
-                    <h2 class="text-3xl font-bold text-white tracking-tight">Resultados de <span class="text-slate-500 italic decoration-slate-700">Eventos</span> Pasados</h2>
+                    <span class="text-xs font-black uppercase tracking-[0.3em] mb-2 block text-slate-400">
+                        ● HISTORIAL DE COMPETENCIAS
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-700 tracking-tight">
+                        Eventos <span class="text-slate-400">Pasados</span>
+                    </h2>
                 </div>
-                <div class="h-[1px] flex-grow mx-8 bg-slate-800"></div>
+                <div class="hidden md:block h-px flex-grow mx-8 bg-slate-200"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($pastEvents as $event)
-                    <a href="{{ route('events.landing', $event->slug) }}" class="group relative h-72 rounded-[2rem] overflow-hidden border border-slate-800 hover:border-slate-500 transition-all">
+                    <a href="{{ route('events.landing', $event->slug) }}"
+                       class="group relative h-64 rounded-[2rem] overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
                         @if($event->banner_path)
-                            <img src="{{ Storage::url($event->banner_path) }}" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-125">
+                            <img src="{{ Storage::url($event->banner_path) }}"
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
                         @else
-                            <div class="w-full h-full bg-slate-900 flex items-center justify-center italic text-slate-700 font-bold uppercase">{{ $event->name }}</div>
+                            <div class="w-full h-full bg-slate-300 flex items-center justify-center">
+                                <span class="text-slate-500 font-black uppercase text-sm">{{ $event->name }}</span>
+                            </div>
                         @endif
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                        <div class="absolute bottom-6 left-6 right-6">
-                            <span class="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-1 block">{{ $event->date->format('Y') }}</span>
-                            <h3 class="text-xl font-bold text-white group-hover:text-sky-400 transition-colors line-clamp-1 italic italic">{{ $event->name }}</h3>
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent"></div>
+
+                        {{-- Badge finalizado --}}
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-slate-300 border border-white/20"
+                                  style="background: rgba(0,0,0,0.4); backdrop-filter: blur(8px);">
+                                FINALIZADO
+                            </span>
                         </div>
-                        <div class="absolute top-6 left-6 glass px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 border border-slate-700">
-                            FINALIZADO
+
+                        <div class="absolute bottom-5 left-5 right-5">
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1 block">
+                                {{ $event->date->format('Y') }}
+                            </span>
+                            <h3 class="text-lg font-black text-white line-clamp-1 group-hover:text-yellow-400 transition-colors">
+                                {{ $event->name }}
+                            </h3>
                         </div>
                     </a>
                 @endforeach
             </div>
         </section>
         @endif
+
     </main>
 
-    <!-- Branding Section / Partners (Mockup if needed or just generic) -->
-    <section class="py-24 bg-slate-900/50 border-y border-slate-800">
+    <!-- Sección Patrocinadores -->
+    <section class="py-20 border-t border-slate-200" style="background: white;">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-xs font-black tracking-[0.4em] text-slate-600 uppercase italic mb-8">Nuestros Principales Patrocinadores</p>
-            <div class="flex flex-wrap items-center justify-center gap-12 opacity-30 invert">
-                <!-- Fallback placeholders if no brands exist globally, but usually home showcases general ones -->
-                <span class="text-4xl font-black opacity-20 italic italic">LOGO SAMPLE 01</span>
-                <span class="text-4xl font-black opacity-40 italic italic italic">LOGO SAMPLE 02</span>
-                <span class="text-4xl font-black opacity-30 italic italic italic">LOGO SAMPLE 03</span>
-                <span class="text-4xl font-black opacity-50 italic italic italic">LOGO SAMPLE 04</span>
+            <p class="text-xs font-black tracking-[0.4em] text-slate-400 uppercase mb-10">
+                Nuestros Principales Patrocinadores
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-16 opacity-40 hover:opacity-70 transition-opacity duration-500">
+                <span class="text-3xl font-black text-slate-400 uppercase">LOGO 01</span>
+                <span class="text-3xl font-black text-slate-400 uppercase">LOGO 02</span>
+                <span class="text-3xl font-black text-slate-400 uppercase">LOGO 03</span>
+                <span class="text-3xl font-black text-slate-400 uppercase">LOGO 04</span>
             </div>
         </div>
     </section>
+
 @endsection
