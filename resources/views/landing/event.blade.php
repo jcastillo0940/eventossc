@@ -584,7 +584,7 @@
             </div>
 
             <img :src="selectedPhoto" 
-                 class="max-w-[95vw] max-h-[90vh] md:max-w-[90vw] md:max-h-[85vh] rounded-lg shadow-2xl object-contain transition-all duration-500 transform scale-100"
+                 class="w-auto h-auto max-w-[85vw] max-h-[75vh] md:max-w-[70vw] md:max-h-[80vh] rounded-xl shadow-2xl object-contain transition-all duration-500 border border-white/10"
                  @click.stop>
         </div>
 
