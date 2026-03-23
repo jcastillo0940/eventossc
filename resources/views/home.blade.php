@@ -4,7 +4,6 @@
 
 @section('content')
 
-    <!-- Hero Section -->
     <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden" style="background: linear-gradient(135deg, #1A6FBF 0%, #0d4a8a 60%, #0a3a6e 100%);">
         
         {{-- Blob decorativo amarillo --}}
@@ -58,10 +57,8 @@
         </div>
     </section>
 
-    <!-- Main Content -->
     <main id="upcoming" style="background: #F0EDE8;" class="px-4 py-24 space-y-24">
 
-        <!-- Próximos Eventos -->
         <section class="max-w-7xl mx-auto">
 
             <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
@@ -100,7 +97,15 @@
                             {{-- Imagen --}}
                             <div class="relative h-56 overflow-hidden">
                                 @if($event->banner_path)
-                                    <img src="{{ Storage::url($event->banner_path) }}"
+                                    @php
+                                        $bannerUrl = $event->banner_path;
+                                        if (!str_starts_with($bannerUrl, 'http')) {
+                                            $bannerUrl = secure_asset('storage/' . ltrim($bannerUrl, '/'));
+                                        } else {
+                                            $bannerUrl = str_replace('http://', 'https://', $bannerUrl);
+                                        }
+                                    @endphp
+                                    <img src="{{ $bannerUrl }}"
                                          class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                          alt="{{ $event->name }}">
                                 @else
@@ -121,8 +126,16 @@
 
                                 {{-- Logo del evento --}}
                                 @if($event->logo_path)
+                                    @php
+                                        $logoUrl = $event->logo_path;
+                                        if (!str_starts_with($logoUrl, 'http')) {
+                                            $logoUrl = secure_asset('storage/' . ltrim($logoUrl, '/'));
+                                        } else {
+                                            $logoUrl = str_replace('http://', 'https://', $logoUrl);
+                                        }
+                                    @endphp
                                     <div class="absolute bottom-4 right-4 w-12 h-12 rounded-2xl bg-white shadow-lg p-1.5">
-                                        <img src="{{ Storage::url($event->logo_path) }}" class="w-full h-full object-contain">
+                                        <img src="{{ $logoUrl }}" class="w-full h-full object-contain">
                                     </div>
                                 @endif
                             </div>
@@ -174,7 +187,6 @@
             @endif
         </section>
 
-        <!-- Eventos Pasados -->
         @if(!$pastEvents->isEmpty())
         <section class="max-w-7xl mx-auto">
             <div class="flex flex-col md:flex-row md:items-end gap-4 mb-12">
@@ -194,7 +206,15 @@
                     <a href="{{ route('events.landing', $event->slug) }}"
                        class="group relative h-64 rounded-[2rem] overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
                         @if($event->banner_path)
-                            <img src="{{ Storage::url($event->banner_path) }}"
+                            @php
+                                $pastBannerUrl = $event->banner_path;
+                                if (!str_starts_with($pastBannerUrl, 'http')) {
+                                    $pastBannerUrl = secure_asset('storage/' . ltrim($pastBannerUrl, '/'));
+                                } else {
+                                    $pastBannerUrl = str_replace('http://', 'https://', $pastBannerUrl);
+                                }
+                            @endphp
+                            <img src="{{ $pastBannerUrl }}"
                                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 grayscale group-hover:grayscale-0">
                         @else
                             <div class="w-full h-full bg-slate-300 flex items-center justify-center">
@@ -227,7 +247,6 @@
 
     </main>
 
-    <!-- Sección Patrocinadores -->
     <section class="py-20 border-t border-slate-200" style="background: white;">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p class="text-xs font-black tracking-[0.4em] text-slate-400 uppercase mb-10">

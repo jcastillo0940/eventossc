@@ -36,7 +36,7 @@ class DigitizerController extends Controller
 
     public function getCriteria(EvaluationCategory $category): JsonResponse
     {
-        return response()->json($category->criteria);
+        return response()->json($category->criteria()->where('is_active', true)->get());
     }
 
     public function store(Request $request): JsonResponse
@@ -97,10 +97,16 @@ class DigitizerController extends Controller
         $eventId = $request->query('event_id');
         if (!$eventId) return response()->json([]);
 
+        $judges = \App\Models\EventJudge::with('user')
+            ->where('event_id', $eventId)
+            ->where('is_active', true)
+            ->get()
+            ->map(fn($ej) => $ej->user);
+
         return response()->json([
-            'categories' => EvaluationCategory::where('event_id', $eventId)->get(),
-            'participants' => Participant::where('event_id', $eventId)->get(),
-            'judges' => User::role('Juez')->get()
+            'categories' => EvaluationCategory::where('event_id', $eventId)->where('is_active', true)->get(),
+            'participants' => Participant::where('event_id', $eventId)->where('is_active', true)->get(),
+            'judges' => $judges
         ]);
     }
 }

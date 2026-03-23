@@ -17,10 +17,15 @@ class LandingController extends Controller
     public function show(string $slug): View
     {
         $event = Event::with([
-                'participants.scores', 
-                'participants.publicVotes',
-                'judges.user', 
-                'brands'
+                'participants' => function($query) {
+                    $query->where('is_active', true)->with(['scores', 'publicVotes']);
+                },
+                'judges' => function($query) {
+                    $query->where('is_active', true)->with('user');
+                },
+                'brands' => function($query) {
+                    $query->where('is_active', true);
+                }
             ])
             ->where('slug', $slug)
             ->where('is_published', true)

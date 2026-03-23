@@ -24,6 +24,7 @@ class ParticipantDashboardController extends Controller
         /** @var Participant|null $participantProfile */
         $participantProfile = Participant::with('event')
             ->where('user_id', $user->id)
+            ->where('is_active', true)
             ->first();
 
         $event = null;

@@ -20,7 +20,19 @@ class RankingService
         $enablePublic = $event->getSetting('enable_public_vote', 'false') === 'true';
         $publicWeight = (float) $event->getSetting('public_vote_weight', 0);
 
-        return $event->participants()->with(['scores', 'publicVotes'])->get()
+        $activeJudgeIds = $event->judges()->where('is_active', true)->pluck('user_id');
+
+        return $event->participants()
+            ->where('is_active', true)
+            ->with([
+                'scores' => function($query) use ($activeJudgeIds) {
+                    $query->whereHas('category', fn($q) => $q->where('is_active', true))
+                          ->whereHas('criterion', fn($q) => $q->where('is_active', true))
+                          ->whereIn('judge_id', $activeJudgeIds);
+                },
+                'publicVotes'
+            ])
+            ->get()
             ->map(function ($participant) use ($enableSocial, $enablePublic, $publicWeight) {
                 // 1. Puntaje de Jueces
                 $judgeScore = $participant->scores->sum('score');

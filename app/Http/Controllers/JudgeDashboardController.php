@@ -15,7 +15,7 @@ class JudgeDashboardController extends Controller
         
         // Fetch events associated with this judge
         $events = Event::whereHas('judges', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
+            $query->where('user_id', $user->id)->where('is_active', true);
         })->where('is_active', true)->get();
 
         return view('judge.dashboard', compact('events'));
@@ -25,12 +25,17 @@ class JudgeDashboardController extends Controller
     {
         $user = Auth::user();
         
-        // Ensure the judge is assigned to this event
-        if (!$event->judges()->where('user_id', $user->id)->exists()) {
-            abort(403, 'Usted no está asignado a este evento.');
+        // Ensure the judge is assigned to this event and active
+        if (!$event->judges()->where('user_id', $user->id)->where('is_active', true)->exists()) {
+            abort(403, 'Usted no está asignado o no se encuentra activo para este evento.');
         }
 
-        $categories = $event->evaluationCategories()->with('criteria')->get();
+        $categories = $event->evaluationCategories()
+            ->where('is_active', true)
+            ->with(['criteria' => function($query) {
+                $query->where('is_active', true);
+            }])
+            ->get();
         $participants = $event->participants()->where('is_active', true)->get();
 
         return view('judge.evaluate', compact('event', 'categories', 'participants'));

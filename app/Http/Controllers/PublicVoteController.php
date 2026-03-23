@@ -25,6 +25,12 @@ class PublicVoteController extends Controller
             return response()->json(['error' => 'La votación pública no está activa para este evento.'], 403);
         }
 
+        // 1.1 Check Participant is active
+        $participant = \App\Models\Participant::find($validated['participant_id']);
+        if (!$participant || !$participant->is_active) {
+            return response()->json(['error' => 'El participante seleccionado no está activo.'], 403);
+        }
+
         // 2. Prevent duplicate votes by fingerprint
         $exists = PublicVote::where('event_id', $event->id)
             ->where('fingerprint', $validated['fingerprint'])
