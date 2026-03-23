@@ -417,7 +417,7 @@
                 </p>
             </div>
 
-            <div class="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6 space-y-6">
+            <div class="masonry-gallery gap-4 md:gap-6">
                 @foreach($allPhotos as $index => $photo)
                     <div class="break-inside-avoid group relative rounded-[2rem] overflow-hidden bg-white shadow-lg cursor-zoom-in border border-slate-100 mb-6"
                          @click="openLightbox({{ $index }})">
@@ -488,6 +488,23 @@
     @keyframes subtle-zoom {
         0%   { transform: scale(1.05); }
         100% { transform: scale(1.12); }
+    }
+    .masonry-gallery {
+        column-count: 2;
+        column-gap: 1.5rem;
+    }
+    .masonry-gallery > div {
+        break-inside: avoid;
+        margin-bottom: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        .masonry-gallery { column-count: 3; }
+    }
+    @media (min-width: 1024px) {
+        .masonry-gallery { column-count: 4; }
+    }
+    @media (min-width: 1280px) {
+        .masonry-gallery { column-count: 5; }
     }
 </style>
 @endpush
