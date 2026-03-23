@@ -565,26 +565,27 @@
              style="display: none;">
             
             {{-- Close --}}
-            <button @click="closeLightbox()" class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[110] bg-black/20 p-2 rounded-full">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <button @click="closeLightbox()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-all z-[120] bg-white/10 hover:bg-white/20 p-3 rounded-full backdrop-blur-md border border-white/10 group">
+                <svg class="w-8 h-8 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
 
             {{-- Nav Arrows --}}
-            <button @click="prevPhoto()" class="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-all z-[110] bg-white/5 hover:bg-white/10 p-4 rounded-full backdrop-blur-md">
-                <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+            <button @click="prevPhoto()" class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all z-[110] bg-white/5 hover:bg-white/10 p-3 md:p-5 rounded-full backdrop-blur-sm">
+                <svg class="w-6 h-6 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
             </button>
 
-            <button @click="nextPhoto()" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-all z-[110] bg-white/5 hover:bg-white/10 p-4 rounded-full backdrop-blur-md">
-                <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+            <button @click="nextPhoto()" class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-all z-[110] bg-white/5 hover:bg-white/10 p-3 md:p-5 rounded-full backdrop-blur-sm">
+                <svg class="w-6 h-6 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
             </button>
 
             {{-- Image Info --}}
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/40 font-black text-xs uppercase tracking-widest z-[110]">
-                Imagen <span class="text-white" x-text="currentIndex + 1"></span> de <span class="text-white" x-text="allPhotos.length"></span>
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/30 font-black text-[10px] uppercase tracking-[0.3em] z-[110] bg-black/20 px-6 py-2 rounded-full backdrop-blur-md border border-white/5">
+                Fotografía <span class="text-white" x-text="currentIndex + 1"></span> <span class="mx-2 opacity-50">/</span> <span class="text-white" x-text="allPhotos.length"></span>
             </div>
 
             <img :src="selectedPhoto" 
-                 class="max-w-full max-h-[85vh] rounded-2xl md:rounded-[1rem] shadow-2xl object-contain border-4 border-white/5 transition-all duration-300">
+                 class="max-w-[95vw] max-h-[90vh] md:max-w-[90vw] md:max-h-[85vh] rounded-lg shadow-2xl object-contain transition-all duration-500 transform scale-100"
+                 @click.stop>
         </div>
 
     </main>
