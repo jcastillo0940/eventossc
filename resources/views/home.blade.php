@@ -247,16 +247,28 @@
 
     </main>
 
-    <section class="py-20 border-t border-slate-200" style="background: white;">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-xs font-black tracking-[0.4em] text-slate-400 uppercase mb-10">
-                Nuestros Principales Patrocinadores
-            </p>
-            <div class="flex flex-wrap items-center justify-center gap-16 opacity-40 hover:opacity-70 transition-opacity duration-500">
-                <span class="text-3xl font-black text-slate-400 uppercase">LOGO 01</span>
-                <span class="text-3xl font-black text-slate-400 uppercase">LOGO 02</span>
-                <span class="text-3xl font-black text-slate-400 uppercase">LOGO 03</span>
-                <span class="text-3xl font-black text-slate-400 uppercase">LOGO 04</span>
+    {{-- ===================== BRANDS / SPONSORS ===================== --}}
+    <section class="py-24 border-t border-slate-100" style="background: white;">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16 space-y-3">
+                <span class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 block">
+                    Confían en Nosotros
+                </span>
+                <h2 class="text-3xl font-black text-slate-800 uppercase italic italic">Marcas <span class="text-sky-500">Aliadas</span></h2>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-12 md:gap-24 opacity-30 hover:opacity-60 transition-all duration-700 grayscale hover:grayscale-0">
+                <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" class="h-14 object-contain" alt="Super Carnes">
+                <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" class="h-14 object-contain filter invert" alt="Partner 02">
+                <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" class="h-10 object-contain" alt="Partner 03">
+                <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" class="h-14 object-contain filter hue-rotate-180" alt="Partner 04">
+            </div>
+            
+            <div class="mt-20 text-center">
+                <p class="text-slate-400 text-xs font-medium max-w-lg mx-auto leading-relaxed uppercase tracking-widest italic italic">
+                    ¿Quieres que tu marca esté presente en nuestros próximos eventos? <br>
+                    <a href="#" class="text-sky-500 font-black hover:underline mt-2 inline-block">Contáctanos aquí</a>
+                </p>
             </div>
         </div>
     </section>

@@ -307,7 +307,7 @@
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                @foreach($event->participants as $participant)
+                @foreach($event->participants->where('is_active', true) as $participant)
                     @php
                         $partPhotoUrl = $participant->photo_path;
                         if ($partPhotoUrl && !str_starts_with($partPhotoUrl, 'http')) {
@@ -352,7 +352,7 @@
         </section>
 
         {{-- JUECES --}}
-        @if($event->judges->count() > 0)
+        @if($event->judges->where('is_active', true)->count() > 0)
         <section id="judges" class="py-10">
             <div class="text-center mb-14 max-w-2xl mx-auto space-y-3">
                 <span class="text-xs font-black uppercase tracking-[0.3em] block" style="color: #1A6FBF;">
@@ -367,7 +367,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($event->judges as $judge)
+                @foreach($event->judges->where('is_active', true) as $judge)
                     @php
                         $judgePhotoUrl = $judge->user->photo_path ?? null;
                         if ($judgePhotoUrl && !str_starts_with($judgePhotoUrl, 'http')) {
