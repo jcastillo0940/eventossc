@@ -93,6 +93,30 @@ class Event extends Model implements HasMedia
     }
 
     /**
+     * Add a position to revealed set
+     */
+    public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    {
+        $this->addMediaConversion('optimized')
+            ->width(1920)
+            ->height(1920)
+            ->format('webp')
+            ->quality(80)
+            ->sharpen(10)
+            ->performOnCollections('gallery_photos', 'gallery_brand_logos', 'gallery', 'logo', 'banner')
+            ->nonQueued();
+
+        $this->addMediaConversion('thumb')
+            ->width(600)
+            ->height(600)
+            ->format('webp')
+            ->quality(75)
+            ->sharpen(10)
+            ->performOnCollections('gallery_photos', 'logo')
+            ->nonQueued();
+    }
+
+    /**
      * Reset all revealed positions
      */
     public function resetRevealedPositions(): void

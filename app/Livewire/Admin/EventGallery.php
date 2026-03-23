@@ -47,6 +47,21 @@ class EventGallery extends Component
         }
     }
 
+    public function toggleHighlight($mediaId)
+    {
+        $media = $this->event->media()->find($mediaId);
+        if ($media) {
+            $current = $media->getCustomProperty('highlight', false);
+            $media->setCustomProperty('highlight', !$current);
+            $media->save();
+            
+            $this->dispatch('toast', [
+                'title' => 'DESTACADOS ACTUALIZADOS', 
+                'message' => !$current ? 'Foto marcada como destacada.' : 'Foto removida de destacados.'
+            ]);
+        }
+    }
+
     public function render()
     {
         $photos = $this->event->getMedia('gallery_photos');

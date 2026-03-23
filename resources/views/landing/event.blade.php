@@ -3,7 +3,14 @@
 @section('title', $event->name . ' | Super Carnes Eventos')
 
 @section('content')
-<div x-data="eventLanding('{{ $event->date->toISOString() }}')">
+<div x-data="{ 
+    ...eventLanding('{{ $event->date->toISOString() }}'),
+    selectedPhoto: null,
+    closeLightbox() {
+        this.selectedPhoto = null;
+        document.body.style.overflow = 'auto';
+    }
+}" @keydown.escape.window="closeLightbox()">
 
     {{-- ===================== HERO ===================== --}}
     <section class="relative h-[65vh] md:h-[85vh] flex items-end justify-center overflow-hidden">
@@ -166,17 +173,35 @@
                 </div>
             </div>
 
-            {{-- Galería --}}
+            {{-- Galería Highlights --}}
             <div class="grid grid-cols-2 gap-4">
-                @php $gallery = $event->getMedia('gallery'); @endphp
-                @if($gallery->count() > 0)
-                    @foreach($gallery->take(4) as $index => $media)
-                        <div class="aspect-square rounded-[2rem] overflow-hidden shadow-lg {{ $index % 2 != 0 ? 'mt-8' : '' }}">
-                            <img src="{{ $media->getUrl() }}"
-                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-700">
-                        </div>
-                    @endforeach
-                @else
+                @php 
+                    $highlights = $event->getMedia('gallery_photos')
+                        ->filter(fn($m) => $m->getCustomProperty('highlight') === true)
+                        ->take(3);
+                    
+                    // Fallback to first 3 if no highlights are tagged yet
+                    if($highlights->count() === 0) {
+                        $highlights = $event->getMedia('gallery_photos')->take(3);
+                    }
+                @endphp
+
+                @foreach($highlights as $index => $media)
+                    <div class="aspect-square rounded-[2rem] overflow-hidden shadow-lg {{ $index == 1 ? 'mt-8' : ($index == 2 ? '-mt-4' : '') }}">
+                        <img src="{{ $media->getUrl('thumb') }}"
+                             class="w-full h-full object-cover hover:scale-110 transition-transform duration-700 cursor-pointer"
+                             @click="selectedPhoto = '{{ $media->getUrl() }}'; document.body.style.overflow = 'hidden';">
+                    </div>
+                    
+                    @if($index == 0)
+                        {{-- Espacio para el botón de ir a la galería --}}
+                        <a href="#full-gallery" class="aspect-square rounded-[2rem] flex items-center justify-center border-2 border-dashed border-slate-200 hover:border-sky-300 hover:bg-sky-50 transition-all group">
+                            <span class="text-slate-300 group-hover:text-sky-500 font-black text-xs uppercase tracking-widest">Ver Galería</span>
+                        </a>
+                    @endif
+                @endforeach
+
+                @if($highlights->count() == 0)
                     <div class="aspect-square rounded-[2rem] bg-white shadow-sm border border-slate-100"></div>
                     <div class="aspect-square rounded-[2rem] mt-8 flex items-center justify-center border-2 border-dashed border-slate-200">
                         <span class="text-slate-300 font-black text-xs uppercase tracking-widest">Galería</span>
@@ -376,6 +401,67 @@
             </div>
         </section>
         @endif
+
+        {{-- GALERÍA COMPLETA --}}
+        @php 
+            $allPhotos = $event->getMedia('gallery_photos')->concat($event->getMedia('gallery')); 
+        @endphp
+        @if($allPhotos->count() > 0)
+        <section id="full-gallery" class="space-y-12">
+            <div class="text-center space-y-4">
+                <span class="text-xs font-black uppercase tracking-[0.3em] block text-sky-500">
+                    ● Galería del Evento
+                </span>
+                <h2 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight">
+                    Nuestros <span class="text-sky-500">Momentos</span>
+                </h2>
+                <p class="text-slate-500 font-medium max-w-xl mx-auto">
+                    Explora todos los detalles capturados durante la competencia. 
+                </p>
+            </div>
+
+            <div class="columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6">
+                @foreach($allPhotos as $photo)
+                    <div class="break-inside-avoid group relative rounded-[2rem] overflow-hidden bg-white shadow-lg cursor-zoom-in border border-slate-100"
+                         @click="selectedPhoto = '{{ $photo->getUrl() }}'; document.body.style.overflow = 'hidden';">
+                        <img src="{{ $photo->getUrl('thumb') }}" 
+                             loading="lazy"
+                             class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
+                             alt="Foto del evento">
+                        
+                        {{-- Hover Overlay --}}
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center pb-6">
+                            <div class="bg-white/20 backdrop-blur-md rounded-full p-3 border border-white/30">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+        @endif
+
+        {{-- LIGHTBOX --}}
+        <div x-show="selectedPhoto" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-95"
+             class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-md p-4 md:p-10"
+             @click.self="closeLightbox()"
+             style="display: none;">
+            
+            <button @click="closeLightbox()" class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[110]">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+
+            <img :src="selectedPhoto" 
+                 class="max-w-full max-h-full rounded-2xl md:rounded-[2rem] shadow-2xl object-contain border-4 border-white/10">
+        </div>
 
     </main>
 </div>

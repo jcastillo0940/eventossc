@@ -8,7 +8,7 @@ use App\Models\Event;
 class EventGallery extends Component
 {
     public Event $event;
-    public $limit = 8;
+    public $limit = 12;
     public $totalPhotos = 0;
 
     public function mount(Event $event)
@@ -19,7 +19,7 @@ class EventGallery extends Component
 
     public function loadMore()
     {
-        $this->limit += 8;
+        $this->limit += 12;
     }
 
     public function render()
