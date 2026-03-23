@@ -107,12 +107,6 @@
 </script>
 @endpush
 
-{{-- ===================== STICKY SPONSOR TICKER (BOTTOM) ===================== --}}
-{{-- Spacer so page content is not hidden behind the fixed ticker --}}
-@if($event->brands->count() > 0)
-<div class="h-[58px] md:h-[66px]"></div>
-@endif
-
 <div x-data="eventLanding('{{ $event->date->toISOString() }}', window.eventPhotos)" 
      @keydown.escape.window="closeLightbox()"
      @keydown.right.window="nextPhoto()"
@@ -573,6 +567,11 @@
                  @click.stop>
         </div>
 
+        {{-- Spacer para que el ticker fijo no tape el contenido inferior --}}
+        @if($event->brands->count() > 0)
+        <div class="h-[66px]"></div>
+        @endif
+
     </main>
 </div>
 
@@ -606,7 +605,7 @@
             La duración de 60s (antes 30s) hace el movimiento más lento y legible.
         --}}
         <div class="flex items-center"
-             style="animation: ticker-scroll 60s linear infinite; width: max-content; white-space: nowrap;">
+             style="animation: ticker-scroll 90s linear infinite; width: max-content; white-space: nowrap;">
 
             @php
                 // Construimos el listado de logos una sola vez y lo repetimos 4 veces en el blade
