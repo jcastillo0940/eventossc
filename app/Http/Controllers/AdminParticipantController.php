@@ -84,6 +84,7 @@ class AdminParticipantController extends Controller
         $participant->user()->update(['name' => $validated['name']]);
 
         if ($request->hasFile('photo')) {
+            $participant->clearMediaCollection('photo');
             $participant->addMediaFromRequest('photo')->toMediaCollection('photo');
             $participant->update(['photo_path' => $participant->getFirstMediaUrl('photo')]);
         }
@@ -95,5 +96,11 @@ class AdminParticipantController extends Controller
     {
         $participant->update(['is_active' => !$participant->is_active]);
         return response()->json(['is_active' => $participant->is_active]);
+    }
+    public function deletePhoto(Participant $participant): RedirectResponse
+    {
+        $participant->clearMediaCollection('photo');
+        $participant->update(['photo_path' => null]);
+        return back()->with('success', 'Fotografía eliminada.');
     }
 }

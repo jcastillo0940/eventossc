@@ -188,7 +188,7 @@
 
                 @foreach($highlights as $index => $media)
                     <div class="aspect-square rounded-[2rem] overflow-hidden shadow-lg {{ $index == 1 ? 'mt-8' : ($index == 2 ? '-mt-4' : '') }}">
-                        <img src="{{ $media->getUrl('thumb') }}"
+                        <img src="{{ $media->getUrl() }}"
                              class="w-full h-full object-cover hover:scale-110 transition-transform duration-700 cursor-pointer"
                              @click="selectedPhoto = '{{ $media->getUrl() }}'; document.body.style.overflow = 'hidden';">
                     </div>
@@ -424,7 +424,7 @@
                 @foreach($allPhotos as $photo)
                     <div class="break-inside-avoid group relative rounded-[2rem] overflow-hidden bg-white shadow-lg cursor-zoom-in border border-slate-100"
                          @click="selectedPhoto = '{{ $photo->getUrl() }}'; document.body.style.overflow = 'hidden';">
-                        <img src="{{ $photo->getUrl('thumb') }}" 
+                        <img src="{{ $photo->getUrl() }}" 
                              loading="lazy"
                              class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
                              alt="Foto del evento">

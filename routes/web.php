@@ -70,6 +70,7 @@ Route::middleware(['auth'])->group(function () {
         // Participants CRUD
         Route::resource('/admin/participants', AdminParticipantController::class)->names('admin.participants');
         Route::post('/admin/participants/{participant}/toggle', [AdminParticipantController::class, 'toggle'])->name('admin.participants.toggle');
+        Route::delete('/admin/participants/{participant}/photo', [AdminParticipantController::class, 'deletePhoto'])->name('admin.participants.deletePhoto');
 
         // Brands CRUD
         Route::resource('/admin/brands', AdminBrandController::class)->names('admin.brands');

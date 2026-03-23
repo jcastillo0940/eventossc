@@ -54,8 +54,16 @@
                 <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Cambiar Foto</label>
                 <input type="file" name="photo" accept="image/*"
                        class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors">
+                
                 @if($participant->photo_path)
-                    <div class="text-[10px] font-bold text-emerald-500 uppercase italic italic">Foto actual guardada</div>
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-emerald-50/50 border border-emerald-100">
+                        <span class="text-[10px] font-bold text-emerald-500 uppercase italic italic">Foto actual guardada</span>
+                        <button type="button" 
+                                onclick="if(confirm('¿Eliminar esta fotografía?')) document.getElementById('delete-photo-form').submit();"
+                                class="text-[9px] font-black text-red-500 hover:text-red-700 uppercase tracking-widest transition-colors">
+                            Eliminar Foto
+                        </button>
+                    </div>
                 @endif
             </div>
 
@@ -74,5 +82,10 @@
                 Guardar Cambios
             </button>
         </div>
+    </form>
+    
+    <form id="delete-photo-form" action="{{ route('admin.participants.deletePhoto', $participant) }}" method="POST" class="hidden">
+        @csrf
+        @method('DELETE')
     </form>
 @endsection

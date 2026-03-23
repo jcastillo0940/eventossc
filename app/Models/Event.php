@@ -93,8 +93,9 @@ class Event extends Model implements HasMedia
     }
 
     /**
-     * Add a position to revealed set
+     * Disable optimization as requested by user
      */
+    /*
     public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
     {
         $this->addMediaConversion('optimized')
@@ -115,6 +116,7 @@ class Event extends Model implements HasMedia
             ->performOnCollections('gallery_photos', 'logo')
             ->nonQueued();
     }
+    */
 
     /**
      * Reset all revealed positions

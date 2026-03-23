@@ -17,7 +17,7 @@
             @foreach($photos as $photo)
                 <div class="break-inside-avoid group relative rounded-[2rem] overflow-hidden bg-white shadow-lg cursor-zoom-in border border-slate-100"
                      @click="openLightbox('{{ $photo->getUrl() }}')">
-                    <img src="{{ $photo->getUrl('thumb') }}" 
+                    <img src="{{ $photo->getUrl() }}" 
                          loading="lazy"
                          class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
                          alt="Foto del evento">

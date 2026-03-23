@@ -28,7 +28,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 @foreach($photos as $photo)
                     <div class="dashboard-card relative group overflow-hidden h-48 rounded-[2rem] border-4 {{ $photo->getCustomProperty('highlight') ? 'border-sky-500 shadow-2xl' : 'border-slate-50' }}">
-                        <img src="{{ $photo->getUrl('thumb') }}" class="w-full h-full object-cover">
+                        <img src="{{ $photo->getUrl() }}" class="w-full h-full object-cover">
                         
                         {{-- Tag de destacado --}}
                         @if($photo->getCustomProperty('highlight'))
