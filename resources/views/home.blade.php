@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Eventos y Competencias | Super Carnes')
+@section('title', 'Eventos  | Super Carnes')
 
 @section('content')
 
@@ -16,7 +16,7 @@
         {{-- Logo Super Carnes watermark --}}
         <div class="absolute top-8 left-8 z-10">
             <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" 
-                 alt="Super Carnes" class="h-14 object-contain drop-shadow-lg opacity-90">
+                 alt="Super Carnes" class="h-32 object-contain drop-shadow-lg opacity-90">
         </div>
 
         <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
@@ -28,7 +28,7 @@
             </div>
 
             <h1 class="text-5xl md:text-7xl font-black uppercase leading-tight text-white mb-6 drop-shadow-lg">
-                Competencias <br>
+                Eventos <br>
                 <span style="color: #F5C400;">Super Carnes</span>
             </h1>
             <p class="text-lg md:text-xl text-white/70 font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
