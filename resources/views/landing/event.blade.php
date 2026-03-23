@@ -14,7 +14,7 @@
    @keydown.left.window="prevPhoto()">
 
     {{-- ===================== HERO ===================== --}}
-    <section class="relative min-h-screen flex items-end justify-center overflow-hidden">
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-24">
 
         {{-- Banner --}}
         <div class="absolute inset-0 z-0">
@@ -55,13 +55,25 @@
                 Evento En Vivo
             </div>
 
-            <h1 class="text-5xl md:text-8xl font-black uppercase leading-none text-white tracking-tighter drop-shadow-2xl">
+            <h1 class="text-4xl sm:text-6xl md:text-8xl font-black uppercase leading-tight text-white tracking-tighter drop-shadow-2xl px-2">
                 {{ $event->name }}
             </h1>
 
-            <p class="text-lg md:text-2xl font-bold uppercase tracking-[0.2em]" style="color: #F5C400;">
-    {{ $event->date->format('d M, Y') }} · {{ $event->date->format('g:i a') }}
-</p>
+            <p class="text-base md:text-2xl font-bold uppercase tracking-[0.2em]" style="color: #F5C400;">
+                {{ $event->date->format('d M, Y') }} · {{ $event->date->format('g:i a') }}
+            </p>
+
+            {{-- Botones Hero --}}
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+                <a href="#about" 
+                   class="px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-xl bg-white text-sky-900 w-full sm:w-auto">
+                    Ver más detalles
+                </a>
+                <a href="{{ route('home') }}" 
+                   class="px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-white/30 text-white hover:bg-white/10 w-full sm:w-auto">
+                    Regresar a inicio
+                </a>
+            </div>
 
             {{-- Countdown --}}
             <template x-if="!eventStarted">
@@ -156,20 +168,20 @@
                 <div class="text-slate-600 leading-relaxed text-base font-medium">
                     {!! nl2br(e($event->description ?: 'Pronto tendremos más detalles sobre este emocionante evento.')) !!}
                 </div>
-                <div class="flex gap-10 pt-6 border-t border-slate-200">
-                    <div>
-                        <span class="text-4xl font-black block" style="color: #1A6FBF;">{{ $event->participants->count() }}</span>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Participantes</span>
+                <div class="flex gap-6 sm:gap-10 pt-6 border-t border-slate-200 overflow-x-auto">
+                    <div class="shrink-0 text-center sm:text-left">
+                        <span class="text-2xl sm:text-4xl font-black block" style="color: #1A6FBF;">{{ $event->participants->where('is_active', true)->count() }}</span>
+                        <span class="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Participantes</span>
                     </div>
-                    <div class="w-px bg-slate-200"></div>
-                    <div>
-                        <span class="text-4xl font-black block" style="color: #1A6FBF;">{{ $event->judges->count() }}</span>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Jueces</span>
+                    <div class="w-px bg-slate-200 shrink-0"></div>
+                    <div class="shrink-0 text-center sm:text-left">
+                        <span class="text-2xl sm:text-4xl font-black block" style="color: #1A6FBF;">{{ $event->judges->where('is_active', true)->count() }}</span>
+                        <span class="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Jueces</span>
                     </div>
-                    <div class="w-px bg-slate-200"></div>
-                    <div>
-                        <span class="text-4xl font-black block" style="color: #F5C400;">{{ $event->date->format('Y') }}</span>
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Edición</span>
+                    <div class="w-px bg-slate-200 shrink-0"></div>
+                    <div class="shrink-0 text-center sm:text-left">
+                        <span class="text-2xl sm:text-4xl font-black block" style="color: #F5C400;">{{ $event->date->format('Y') }}</span>
+                        <span class="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Edición</span>
                     </div>
                 </div>
             </div>
@@ -419,11 +431,12 @@
 
             <div class="masonry-gallery gap-4 md:gap-6">
                 @foreach($allPhotos as $index => $photo)
-                    <div class="break-inside-avoid group relative rounded-[2rem] overflow-hidden bg-white shadow-lg cursor-zoom-in border border-slate-100 mb-6"
+                    <div class="break-inside-avoid group relative rounded-[2rem] overflow-hidden bg-slate-200 shadow-lg cursor-zoom-in border border-slate-100 mb-6 aspect-square"
                          @click="openLightbox({{ $index }})">
                         <img src="{{ $photo->getUrl() }}" 
                              loading="lazy"
-                             class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
+                             class="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 opacity-0 blur-lg" 
+                             onload="this.classList.remove('opacity-0', 'blur-lg')"
                              alt="Foto del evento">
                         
                         {{-- Hover Overlay --}}
