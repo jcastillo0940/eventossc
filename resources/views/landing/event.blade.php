@@ -257,11 +257,10 @@
             <div class="space-y-8">
                 <div>
                     <span class="text-xs font-black uppercase tracking-[0.3em] mb-3 block" style="color: #1A6FBF;">
-                        ● Sobre el Evento
+                        ● {{ $event->getSetting('about_subtitle', 'Sobre el Evento') }}
                     </span>
                     <h2 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight leading-tight">
-                        Una competencia <br>
-                        <span style="color: #1A6FBF;">familiar y emocionante</span>
+                        {!! nl2br(e($event->getSetting('about_title', 'Una competencia familiar y emocionante'))) !!}
                     </h2>
                 </div>
                 <div class="text-slate-600 leading-relaxed text-base font-medium">

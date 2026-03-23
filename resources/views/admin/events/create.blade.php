@@ -24,8 +24,19 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Subtítulo Sección "Sobre el Evento"</label>
+                    <input type="text" name="about_subtitle" placeholder="Ej: ● Sobre el Evento" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all" value="{{ old('about_subtitle', 'Sobre el Evento') }}">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Título Sección "Sobre el Evento"</label>
+                    <input type="text" name="about_title" placeholder="Ej: Una competencia familiar y emocionante" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all" value="{{ old('about_title', 'Una competencia familiar y emocionante') }}">
+                </div>
+            </div>
+
             <div class="space-y-2">
-                <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Descripción Público</label>
+                <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Descripción Público (Contenido de la Sección)</label>
                 <textarea name="description" rows="4" placeholder="Describa el evento para los visitantes..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all"></textarea>
             </div>
 

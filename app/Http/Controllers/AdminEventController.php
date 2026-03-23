@@ -58,6 +58,8 @@ class AdminEventController extends Controller
             'enable_public_vote' => $request->has('enable_public_vote') ? 'true' : 'false',
             'enable_social_points' => $request->has('enable_social_points') ? 'true' : 'false',
             'event_schedule' => $request->input('event_schedule') ?? '',
+            'about_subtitle' => $request->input('about_subtitle') ?? 'Sobre el Evento',
+            'about_title' => $request->input('about_title') ?? 'Una competencia familiar y emocionante',
         ];
 
         foreach ($settings as $key => $value) {
@@ -111,6 +113,8 @@ class AdminEventController extends Controller
             'enable_public_vote' => $request->has('enable_public_vote') ? 'true' : 'false',
             'enable_social_points' => $request->has('enable_social_points') ? 'true' : 'false',
             'event_schedule' => $request->input('event_schedule') ?? '',
+            'about_subtitle' => $request->input('about_subtitle') ?? 'Sobre el Evento',
+            'about_title' => $request->input('about_title') ?? 'Una competencia familiar y emocionante',
         ];
 
         foreach ($settings as $key => $value) {
