@@ -403,6 +403,7 @@
         </section>
         @endif
 
+        @if($allPhotos->count() > 0)
         <section id="full-gallery" class="space-y-12">
             <div class="text-center space-y-4">
                 <span class="text-xs font-black uppercase tracking-[0.3em] block text-sky-500">
