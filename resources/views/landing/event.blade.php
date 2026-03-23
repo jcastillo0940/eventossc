@@ -7,11 +7,110 @@
     $allPhotos = $event->getMedia('gallery_photos')->concat($event->getMedia('gallery')); 
 @endphp
 
-<div x-data="{ 
-    ...eventLanding('{{ $event->date->toISOString() }}', @json($allPhotos->map(fn($m) => $m->getUrl())->values())),
-}" @keydown.escape.window="closeLightbox()"
-   @keydown.right.window="nextPhoto()"
-   @keydown.left.window="prevPhoto()">
+@push('scripts')
+<script>
+    window.eventPhotos = @json($allPhotos->map(fn($m) => str_replace('http://', 'https://', $m->getUrl()))->values());
+    
+    function eventLanding(targetDate, photosArr = []) {
+        return {
+            target: new Date(targetDate),
+            countdown: { days: '00', hours: '00', minutes: '00', seconds: '00' },
+            eventStarted: false,
+            voting: false,
+            fingerprint: null,
+            allPhotos: photosArr,
+            selectedPhoto: null,
+            currentIndex: null,
+
+            async init() {
+                if(window.FingerprintJS) {
+                    const fp = await FingerprintJS.load();
+                    const result = await fp.get();
+                    this.fingerprint = result.visitorId;
+                }
+                this.updateCountdown();
+                setInterval(() => this.updateCountdown(), 1000);
+            },
+
+            updateCountdown() {
+                const now = new Date();
+                const diff = this.target - now;
+                if (diff <= 0) { this.eventStarted = true; return; }
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                this.countdown.days    = d.toString().padStart(2, '0');
+                this.countdown.hours   = h.toString().padStart(2, '0');
+                this.countdown.minutes = m.toString().padStart(2, '0');
+                this.countdown.seconds = s.toString().padStart(2, '0');
+            },
+
+            openLightbox(index) {
+                this.currentIndex = index;
+                this.selectedPhoto = this.allPhotos[index];
+                document.body.style.overflow = 'hidden';
+            },
+
+            nextPhoto() {
+                if (this.currentIndex !== null) {
+                    this.currentIndex = (this.currentIndex + 1) % this.allPhotos.length;
+                    this.selectedPhoto = this.allPhotos[this.currentIndex];
+                }
+            },
+
+            prevPhoto() {
+                if (this.currentIndex !== null) {
+                    this.currentIndex = (this.currentIndex - 1 + this.allPhotos.length) % this.allPhotos.length;
+                    this.selectedPhoto = this.allPhotos[this.currentIndex];
+                }
+            },
+
+            closeLightbox() {
+                this.selectedPhoto = null;
+                this.currentIndex = null;
+                document.body.style.overflow = 'auto';
+            },
+
+            async castVote(participantId) {
+                if (!this.fingerprint) {
+                    window.$toast?.warning("Cargando...", "El sistema de seguridad se está iniciando.");
+                    return;
+                }
+                if (!confirm("¿Deseas registrar tu voto? Solo se permite un voto por persona.")) return;
+                this.voting = true;
+                try {
+                    const res = await fetch('{{ route('public.vote') }}', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                        body: JSON.stringify({
+                            event_id: {{ $event->id }},
+                            participant_id: participantId,
+                            fingerprint: this.fingerprint
+                        })
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                        window.$toast?.success("¡Voto registrado!", "¡Gracias por participar!");
+                        setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                        window.$toast?.error("No se pudo votar", data.error || "Es posible que ya hayas votado.");
+                    }
+                } catch (e) {
+                    window.$toast?.error("Error de conexión", "No pudimos conectar con el servidor.");
+                } finally {
+                    this.voting = false;
+                }
+            }
+        }
+    }
+</script>
+@endpush
+
+<div x-data="eventLanding('{{ $event->date->toISOString() }}', window.eventPhotos)" 
+     @keydown.escape.window="closeLightbox()"
+     @keydown.right.window="nextPhoto()"
+     @keydown.left.window="prevPhoto()">
 
     {{-- ===================== HERO ===================== --}}
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-24">
@@ -201,9 +300,9 @@
 
                 @foreach($highlights as $index => $media)
                     <div class="aspect-square rounded-[2rem] overflow-hidden shadow-lg {{ $index == 1 ? 'mt-8' : ($index == 2 ? '-mt-4' : '') }}">
-                        <img src="{{ $media->getUrl() }}"
+                        <img src="{{ str_replace('http://', 'https://', $media->getUrl()) }}"
                              class="w-full h-full object-cover hover:scale-110 transition-transform duration-700 cursor-pointer"
-                             @click="selectedPhoto = '{{ $media->getUrl() }}'; document.body.style.overflow = 'hidden';">
+                             @click="selectedPhoto = '{{ str_replace('http://', 'https://', $media->getUrl()) }}'; document.body.style.overflow = 'hidden';">
                     </div>
                     
                     @if($index == 0)
@@ -523,99 +622,5 @@
 @endpush
 
 @push('scripts')
-<script>
-function eventLanding(targetDate, photosArr = []) {
-    return {
-        target: new Date(targetDate),
-        countdown: { days: '00', hours: '00', minutes: '00', seconds: '00' },
-        eventStarted: false,
-        voting: false,
-        fingerprint: null,
-        
-        // Lightbox
-        allPhotos: photosArr,
-        selectedPhoto: null,
-        currentIndex: null,
-
-        async init() {
-            const fp = await FingerprintJS.load();
-            const result = await fp.get();
-            this.fingerprint = result.visitorId;
-            this.updateCountdown();
-            setInterval(() => this.updateCountdown(), 1000);
-        },
-
-        updateCountdown() {
-            const now = new Date();
-            const diff = this.target - now;
-            if (diff <= 0) { this.eventStarted = true; return; }
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            this.countdown.days    = d.toString().padStart(2, '0');
-            this.countdown.hours   = h.toString().padStart(2, '0');
-            this.countdown.minutes = m.toString().padStart(2, '0');
-            this.countdown.seconds = s.toString().padStart(2, '0');
-        },
-
-        openLightbox(index) {
-            this.currentIndex = index;
-            this.selectedPhoto = this.allPhotos[index];
-            document.body.style.overflow = 'hidden';
-        },
-
-        nextPhoto() {
-            if (this.currentIndex !== null) {
-                this.currentIndex = (this.currentIndex + 1) % this.allPhotos.length;
-                this.selectedPhoto = this.allPhotos[this.currentIndex];
-            }
-        },
-
-        prevPhoto() {
-            if (this.currentIndex !== null) {
-                this.currentIndex = (this.currentIndex - 1 + this.allPhotos.length) % this.allPhotos.length;
-                this.selectedPhoto = this.allPhotos[this.currentIndex];
-            }
-        },
-
-        closeLightbox() {
-            this.selectedPhoto = null;
-            this.currentIndex = null;
-            document.body.style.overflow = 'auto';
-        },
-
-        async castVote(participantId) {
-            if (!this.fingerprint) {
-                window.$toast?.warning("Cargando...", "El sistema de seguridad se está iniciando.");
-                return;
-            }
-            if (!confirm("¿Deseas registrar tu voto? Solo se permite un voto por persona.")) return;
-            this.voting = true;
-            try {
-                const res = await fetch('{{ route('public.vote') }}', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: JSON.stringify({
-                        event_id: {{ $event->id }},
-                        participant_id: participantId,
-                        fingerprint: this.fingerprint
-                    })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    window.$toast?.success("¡Voto registrado!", "¡Gracias por participar!");
-                    setTimeout(() => window.location.reload(), 2000);
-                } else {
-                    window.$toast?.error("No se pudo votar", data.error || "Es posible que ya hayas votado.");
-                }
-            } catch (e) {
-                window.$toast?.error("Error de conexión", "No pudimos conectar con el servidor.");
-            } finally {
-                this.voting = false;
-            }
-        }
-    }
-}
-</script>
+{{-- Event Landing Logic has been moved to the top of the file for better initialization --}}
 @endpush
