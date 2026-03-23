@@ -267,22 +267,30 @@
                 <div class="text-slate-600 leading-relaxed text-base font-medium">
                     {!! nl2br(e($event->description ?: 'Pronto tendremos más detalles sobre este emocionante evento.')) !!}
                 </div>
+                @if($event->participants->where('is_active', true)->count() > 0 || $event->judges->where('is_active', true)->count() > 0)
                 <div class="flex gap-6 sm:gap-10 pt-6 border-t border-slate-200 overflow-x-auto">
+                    @if($event->participants->where('is_active', true)->count() > 0)
                     <div class="shrink-0 text-center sm:text-left">
                         <span class="text-2xl sm:text-4xl font-black block" style="color: #1A6FBF;">{{ $event->participants->where('is_active', true)->count() }}</span>
                         <span class="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Participantes</span>
                     </div>
                     <div class="w-px bg-slate-200 shrink-0"></div>
+                    @endif
+                    
+                    @if($event->judges->where('is_active', true)->count() > 0)
                     <div class="shrink-0 text-center sm:text-left">
                         <span class="text-2xl sm:text-4xl font-black block" style="color: #1A6FBF;">{{ $event->judges->where('is_active', true)->count() }}</span>
                         <span class="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Jueces</span>
                     </div>
                     <div class="w-px bg-slate-200 shrink-0"></div>
+                    @endif
+
                     <div class="shrink-0 text-center sm:text-left">
                         <span class="text-2xl sm:text-4xl font-black block" style="color: #F5C400;">{{ $event->date->format('Y') }}</span>
                         <span class="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Edición</span>
                     </div>
                 </div>
+                @endif
             </div>
 
             {{-- Galería Highlights --}}
@@ -324,8 +332,33 @@
             </div>
         </section>
 
+        {{-- CRONOGRAMA --}}
+        @if($schedule = $event->getSetting('event_schedule'))
+        <section id="schedule" class="py-10 bg-white rounded-[3rem] p-10 md:p-16 shadow-xl border border-slate-100">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div class="space-y-4">
+                    <span class="text-xs font-black uppercase tracking-[0.3em] block" style="color: #F5C400;">
+                        ● Planificación
+                    </span>
+                    <h2 class="text-4xl font-black text-slate-800 tracking-tight italic">
+                        Cronograma <br>
+                        <span style="color: #1A6FBF;">del Evento</span>
+                    </h2>
+                    <p class="text-slate-500 font-medium tracking-tight">
+                        Sigue cada detalle de nuestra agenda para no perderte nada.
+                    </p>
+                </div>
+                <div class="lg:col-span-2">
+                    <div class="prose prose-slate max-w-none font-bold text-slate-700 whitespace-pre-line bg-slate-50 p-8 rounded-2xl border border-slate-100 shadow-inner">
+                        {!! $schedule !!}
+                    </div>
+                </div>
+            </div>
+        </section>
+        @endif
+
         {{-- TABLA DE POSICIONES --}}
-        @if($event->getSetting('show_leaderboard_to_participants') === 'true' && $ranking && $ranking->count() > 0)
+        @if($event->participants->where('is_active', true)->count() > 0 && $event->getSetting('show_leaderboard_to_participants') === 'true' && isset($ranking) && $ranking->count() > 0)
         <section id="ranking" class="py-10">
             <div class="text-center mb-12 space-y-3">
                 <span class="text-xs font-black uppercase tracking-[0.3em] block" style="color: #1A6FBF;">
@@ -405,6 +438,7 @@
         @endif
 
         {{-- COMPETIDORES --}}
+        @if($event->participants->where('is_active', true)->count() > 0)
         <section id="contestants" class="py-10">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-6">
                 <div>
@@ -461,6 +495,7 @@
                 @endforeach
             </div>
         </section>
+        @endif
 
         {{-- JUECES --}}
         @if($event->judges->where('is_active', true)->count() > 0)
@@ -584,7 +619,7 @@
             </div>
 
             <img :src="selectedPhoto" 
-                 class="w-auto h-auto max-w-[85vw] max-h-[75vh] md:max-w-[70vw] md:max-h-[80vh] rounded-xl shadow-2xl object-contain transition-all duration-500 border border-white/10"
+                 class="max-w-[95vw] max-h-[80vh] md:max-w-[90vw] md:max-h-[85vh] object-contain rounded-xl shadow-2xl transition-all duration-500 border border-white/10"
                  @click.stop>
         </div>
 

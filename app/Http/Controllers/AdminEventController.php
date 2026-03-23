@@ -57,6 +57,7 @@ class AdminEventController extends Controller
             'show_leaderboard_to_participants' => $request->has('show_leaderboard_to_participants') ? 'true' : 'false',
             'enable_public_vote' => $request->has('enable_public_vote') ? 'true' : 'false',
             'enable_social_points' => $request->has('enable_social_points') ? 'true' : 'false',
+            'event_schedule' => $request->input('event_schedule', ''),
         ];
 
         foreach ($settings as $key => $value) {
@@ -109,6 +110,7 @@ class AdminEventController extends Controller
             'show_leaderboard_to_participants' => $request->has('show_leaderboard_to_participants') ? 'true' : 'false',
             'enable_public_vote' => $request->has('enable_public_vote') ? 'true' : 'false',
             'enable_social_points' => $request->has('enable_social_points') ? 'true' : 'false',
+            'event_schedule' => $request->input('event_schedule', ''),
         ];
 
         foreach ($settings as $key => $value) {

@@ -30,6 +30,11 @@
                 <textarea name="description" rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all">{{ $event->description }}</textarea>
             </div>
 
+            <div class="space-y-2">
+                <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Cronograma (Opcional)</label>
+                <textarea name="event_schedule" rows="4" placeholder="Ej: 13:00 Apertura, 14:00 Inicio..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all">{{ $event->getSetting('event_schedule') }}</textarea>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div class="space-y-3">
                     <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Cambiar Logo</label>
