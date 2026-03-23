@@ -139,10 +139,10 @@
     @endif
 
     {{-- ===================== MAIN CONTENT ===================== --}}
-    <main class="max-w-7xl mx-auto px-4 py-20 space-y-28" style="background: #F0EDE8;">
+    <main class="max-w-7xl mx-auto px-4 py-32 space-y-48" style="background: #F0EDE8;">
 
         {{-- SOBRE EL EVENTO --}}
-        <section id="about" class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <section id="about" class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center py-10">
             <div class="space-y-8">
                 <div>
                     <span class="text-xs font-black uppercase tracking-[0.3em] mb-3 block" style="color: #1A6FBF;">
@@ -215,7 +215,7 @@
 
         {{-- TABLA DE POSICIONES --}}
         @if($event->getSetting('show_leaderboard_to_participants') === 'true' && $ranking && $ranking->count() > 0)
-        <section id="ranking">
+        <section id="ranking" class="py-10">
             <div class="text-center mb-12 space-y-3">
                 <span class="text-xs font-black uppercase tracking-[0.3em] block" style="color: #1A6FBF;">
                     ● Resultados en Tiempo Real
@@ -294,7 +294,7 @@
         @endif
 
         {{-- COMPETIDORES --}}
-        <section id="contestants">
+        <section id="contestants" class="py-10">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-6">
                 <div>
                     <span class="text-xs font-black uppercase tracking-[0.3em] mb-3 block" style="color: #1A6FBF;">
@@ -353,7 +353,7 @@
 
         {{-- JUECES --}}
         @if($event->judges->count() > 0)
-        <section id="judges">
+        <section id="judges" class="py-10">
             <div class="text-center mb-14 max-w-2xl mx-auto space-y-3">
                 <span class="text-xs font-black uppercase tracking-[0.3em] block" style="color: #1A6FBF;">
                     ● Panel de Evaluación
@@ -404,7 +404,7 @@
         @endif
 
         @if($allPhotos->count() > 0)
-        <section id="full-gallery" class="space-y-12">
+        <section id="full-gallery" class="py-10 space-y-12">
             <div class="text-center space-y-4">
                 <span class="text-xs font-black uppercase tracking-[0.3em] block text-sky-500">
                     ● Galería del Evento
