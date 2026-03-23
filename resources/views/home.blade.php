@@ -35,16 +35,11 @@
                 Descubre nuestros eventos y competencias familiares. Vota por tus favoritos en tiempo real y vive la emoción junto a toda la familia.
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <div class="flex justify-center">
                 <a href="#upcoming" 
                    class="px-10 py-4 rounded-2xl font-black text-base uppercase tracking-wider transition-all transform hover:scale-105 active:scale-95 shadow-2xl"
                    style="background: #F5C400; color: #1A6FBF;">
                     Explorar Eventos
-                </a>
-                <a href="{{ route('login') }}" 
-                   class="px-10 py-4 rounded-2xl font-black text-base uppercase tracking-wider text-white border border-white/30 transition-all transform hover:scale-105 hover:bg-white/10"
-                   style="backdrop-filter: blur(12px);">
-                    Soy Juez / Admin
                 </a>
             </div>
         </div>
@@ -56,49 +51,6 @@
             </svg>
         </div>
     </section>
-
-    {{-- ===================== TICKER DE MARCAS (debajo del hero) ===================== --}}
-    @if($brands->count() > 0)
-    <div class="relative overflow-hidden py-4" style="background: #1A6FBF;">
-
-        {{-- Borde amarillo top --}}
-        <div class="absolute top-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
-
-        {{-- Fade masks izquierda / derecha --}}
-        <div class="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none"
-             style="background: linear-gradient(to right, #1A6FBF, transparent);"></div>
-        <div class="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none"
-             style="background: linear-gradient(to left, #1A6FBF, transparent);"></div>
-
-        <div class="overflow-hidden">
-            {{-- 2 copias para loop continuo sin blancos --}}
-            <div class="ticker-track flex items-center" style="width: max-content; white-space: nowrap;">
-
-                @foreach([1, 2] as $_)
-                    @foreach($brands as $brand)
-                        <div class="shrink-0 flex items-center justify-center px-10">
-                            @php
-                                $logoUrl = $brand->logo_path;
-                                if (!str_starts_with($logoUrl, 'http')) {
-                                    $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
-                                }
-                            @endphp
-                            <img src="{{ $logoUrl }}"
-                                 class="h-8 md:h-10 w-auto object-contain"
-                                 style="opacity: 0.85;"
-                                 loading="lazy"
-                                 alt="{{ $brand->name }}">
-                        </div>
-                    @endforeach
-                @endforeach
-
-            </div>
-        </div>
-
-        {{-- Borde amarillo bottom --}}
-        <div class="absolute bottom-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
-    </div>
-    @endif
 
     <main id="upcoming" style="background: #F0EDE8;" class="px-4 py-24 space-y-24">
 
@@ -300,7 +252,12 @@
                 </h2>
             </div>
 
-            <div class="flex flex-wrap items-center justify-center gap-10 md:gap-16">
+            {{-- 
+                Efecto: al hacer hover sobre un logo, ese crece (scale 1.35)
+                y los demás se comprimen (scale 0.85) y bajan opacidad.
+                Al salir del contenedor todo vuelve al estado normal.
+            --}}
+            <div class="brands-grid flex flex-wrap items-center justify-center gap-10 md:gap-16">
                 @foreach($brands as $brand)
                     @php
                         $logoUrl = $brand->logo_path;
@@ -308,12 +265,11 @@
                             $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
                         }
                     @endphp
-                    <div class="group flex items-center justify-center transition-all duration-300"
-                         style="opacity: 0.5;" 
-                         onmouseover="this.style.opacity='1'"
-                         onmouseout="this.style.opacity='0.5'">
+                    <div class="brand-item flex items-center justify-center"
+                         style="transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), opacity 0.35s ease;">
                         <img src="{{ $logoUrl }}"
-                             class="h-10 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                             class="h-10 md:h-14 w-auto object-contain"
+                             style="opacity: 0.5; transition: opacity 0.35s ease;"
                              loading="lazy"
                              alt="{{ $brand->name }}">
                     </div>
@@ -335,13 +291,53 @@
 
 @push('styles')
 <style>
-    .ticker-track {
-        animation: ticker-scroll 50s linear infinite;
-        will-change: transform;
+    /* Estado activo: el logo hovered crece con un pequeño bounce */
+    .brand-item.is-active {
+        transform: scale(1.35);
+        z-index: 10;
     }
-    @keyframes ticker-scroll {
-        0%   { transform: translate3d(0, 0, 0); }
-        100% { transform: translate3d(-50%, 0, 0); }
+    .brand-item.is-active img {
+        opacity: 1 !important;
+    }
+
+    /* Estado inactivo: los demás logos se comprimen levemente */
+    .brand-item.is-inactive {
+        transform: scale(0.82);
+        opacity: 0.4;
+    }
+    .brand-item.is-inactive img {
+        opacity: 0.35 !important;
     }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+(function () {
+    const grid = document.querySelector('.brands-grid');
+    if (!grid) return;
+
+    const items = Array.from(grid.querySelectorAll('.brand-item'));
+
+    items.forEach(function (item) {
+        item.addEventListener('mouseenter', function () {
+            items.forEach(function (other) {
+                if (other === item) {
+                    other.classList.add('is-active');
+                    other.classList.remove('is-inactive');
+                } else {
+                    other.classList.add('is-inactive');
+                    other.classList.remove('is-active');
+                }
+            });
+        });
+    });
+
+    grid.addEventListener('mouseleave', function () {
+        items.forEach(function (item) {
+            item.classList.remove('is-active', 'is-inactive');
+        });
+    });
+})();
+</script>
 @endpush
