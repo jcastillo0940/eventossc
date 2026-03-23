@@ -34,7 +34,7 @@ class EventService
                 foreach ($dto->settings as $key => $value) {
                     $event->settings()->create([
                         'key' => $key,
-                        'value' => $value,
+                        'value' => $value ?? '',
                     ]);
                 }
             }
@@ -58,7 +58,7 @@ class EventService
                 foreach ($dto->settings as $key => $value) {
                     $event->settings()->updateOrCreate(
                         ['key' => $key],
-                        ['value' => $value]
+                        ['value' => $value ?? '']
                     );
                 }
             }

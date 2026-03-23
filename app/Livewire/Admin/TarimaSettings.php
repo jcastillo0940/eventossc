@@ -32,11 +32,11 @@ class TarimaSettings extends Component
 
     public function save()
     {
-        $this->event->settings()->updateOrCreate(['key' => 'stage_bg_color'], ['value' => $this->bg_color]);
-        $this->event->settings()->updateOrCreate(['key' => 'stage_accent_color'], ['value' => $this->accent_color]);
-        $this->event->settings()->updateOrCreate(['key' => 'stage_reveal_animation'], ['value' => $this->reveal_animation]);
+        $this->event->settings()->updateOrCreate(['key' => 'stage_bg_color'], ['value' => $this->bg_color ?? '']);
+        $this->event->settings()->updateOrCreate(['key' => 'stage_accent_color'], ['value' => $this->accent_color ?? '']);
+        $this->event->settings()->updateOrCreate(['key' => 'stage_reveal_animation'], ['value' => $this->reveal_animation ?? '']);
         $this->event->settings()->updateOrCreate(['key' => 'stage_enable_confetti'], ['value' => $this->enable_confetti ? 'true' : 'false']);
-        $this->event->settings()->updateOrCreate(['key' => 'stage_video_url'], ['value' => $this->video_url]);
+        $this->event->settings()->updateOrCreate(['key' => 'stage_video_url'], ['value' => $this->video_url ?? '']);
 
         if ($this->new_background_image) {
             $path = $this->new_background_image->store('stage', 'public');

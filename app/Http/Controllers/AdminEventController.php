@@ -57,11 +57,11 @@ class AdminEventController extends Controller
             'show_leaderboard_to_participants' => $request->has('show_leaderboard_to_participants') ? 'true' : 'false',
             'enable_public_vote' => $request->has('enable_public_vote') ? 'true' : 'false',
             'enable_social_points' => $request->has('enable_social_points') ? 'true' : 'false',
-            'event_schedule' => $request->input('event_schedule', ''),
+            'event_schedule' => $request->input('event_schedule') ?? '',
         ];
 
         foreach ($settings as $key => $value) {
-            $event->settings()->create(['key' => $key, 'value' => $value]);
+            $event->settings()->create(['key' => $key, 'value' => $value ?? '']);
         }
 
         if ($request->hasFile('logo')) {
@@ -110,11 +110,11 @@ class AdminEventController extends Controller
             'show_leaderboard_to_participants' => $request->has('show_leaderboard_to_participants') ? 'true' : 'false',
             'enable_public_vote' => $request->has('enable_public_vote') ? 'true' : 'false',
             'enable_social_points' => $request->has('enable_social_points') ? 'true' : 'false',
-            'event_schedule' => $request->input('event_schedule', ''),
+            'event_schedule' => $request->input('event_schedule') ?? '',
         ];
 
         foreach ($settings as $key => $value) {
-            $event->settings()->updateOrCreate(['key' => $key], ['value' => $value]);
+            $event->settings()->updateOrCreate(['key' => $key], ['value' => $value ?? '']);
         }
 
         if ($request->hasFile('logo')) {
