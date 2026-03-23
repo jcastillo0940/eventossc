@@ -57,6 +57,49 @@
         </div>
     </section>
 
+    {{-- ===================== TICKER DE MARCAS (debajo del hero) ===================== --}}
+    @if($brands->count() > 0)
+    <div class="relative overflow-hidden py-4" style="background: #1A6FBF;">
+
+        {{-- Borde amarillo top --}}
+        <div class="absolute top-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
+
+        {{-- Fade masks izquierda / derecha --}}
+        <div class="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none"
+             style="background: linear-gradient(to right, #1A6FBF, transparent);"></div>
+        <div class="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none"
+             style="background: linear-gradient(to left, #1A6FBF, transparent);"></div>
+
+        <div class="overflow-hidden">
+            {{-- 2 copias para loop continuo sin blancos --}}
+            <div class="ticker-track flex items-center" style="width: max-content; white-space: nowrap;">
+
+                @foreach([1, 2] as $_)
+                    @foreach($brands as $brand)
+                        <div class="shrink-0 flex items-center justify-center px-10">
+                            @php
+                                $logoUrl = $brand->logo_path;
+                                if (!str_starts_with($logoUrl, 'http')) {
+                                    $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
+                                }
+                            @endphp
+                            <img src="{{ $logoUrl }}"
+                                 class="h-8 md:h-10 w-auto object-contain"
+                                 style="opacity: 0.85;"
+                                 loading="lazy"
+                                 alt="{{ $brand->name }}">
+                        </div>
+                    @endforeach
+                @endforeach
+
+            </div>
+        </div>
+
+        {{-- Borde amarillo bottom --}}
+        <div class="absolute bottom-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
+    </div>
+    @endif
+
     <main id="upcoming" style="background: #F0EDE8;" class="px-4 py-24 space-y-24">
 
         <section class="max-w-7xl mx-auto">
@@ -245,32 +288,60 @@
         </section>
         @endif
 
-    </main>
-
-    {{-- ===================== BRANDS / SPONSORS ===================== --}}
-    <section class="py-24 border-t border-slate-100" style="background: white;">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 space-y-3">
+        {{-- ===================== SECCIÓN MARCAS ALIADAS ===================== --}}
+        @if($brands->count() > 0)
+        <section class="max-w-7xl mx-auto">
+            <div class="text-center mb-14 space-y-3">
                 <span class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 block">
-                    Confían en Nosotros
+                    ● Confían en Nosotros
                 </span>
-                <h2 class="text-3xl font-black text-slate-800 uppercase italic italic">Marcas <span class="text-sky-500">Aliadas</span></h2>
+                <h2 class="text-3xl font-black text-slate-800 uppercase italic">
+                    Marcas <span style="color: #1A6FBF;">Aliadas</span>
+                </h2>
             </div>
-            
-            <div class="flex flex-wrap items-center justify-center gap-12 md:gap-24 opacity-30 hover:opacity-60 transition-all duration-700 grayscale hover:grayscale-0">
-                <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" class="h-14 object-contain" alt="Super Carnes">
-                <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" class="h-14 object-contain filter invert" alt="Partner 02">
-                <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" class="h-10 object-contain" alt="Partner 03">
-                <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png" class="h-14 object-contain filter hue-rotate-180" alt="Partner 04">
+
+            <div class="flex flex-wrap items-center justify-center gap-10 md:gap-16">
+                @foreach($brands as $brand)
+                    @php
+                        $logoUrl = $brand->logo_path;
+                        if (!str_starts_with($logoUrl, 'http')) {
+                            $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
+                        }
+                    @endphp
+                    <div class="group flex items-center justify-center transition-all duration-300"
+                         style="opacity: 0.5;" 
+                         onmouseover="this.style.opacity='1'"
+                         onmouseout="this.style.opacity='0.5'">
+                        <img src="{{ $logoUrl }}"
+                             class="h-10 md:h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
+                             loading="lazy"
+                             alt="{{ $brand->name }}">
+                    </div>
+                @endforeach
             </div>
-            
-            <div class="mt-20 text-center">
-                <p class="text-slate-400 text-xs font-medium max-w-lg mx-auto leading-relaxed uppercase tracking-widest italic italic">
+
+            <div class="mt-16 text-center">
+                <p class="text-slate-400 text-xs font-medium max-w-lg mx-auto leading-relaxed uppercase tracking-widest italic">
                     ¿Quieres que tu marca esté presente en nuestros próximos eventos? <br>
-                    <a href="#" class="text-sky-500 font-black hover:underline mt-2 inline-block">Contáctanos aquí</a>
+                    <a href="#" class="font-black hover:underline mt-2 inline-block" style="color: #1A6FBF;">Contáctanos aquí</a>
                 </p>
             </div>
-        </div>
-    </section>
+        </section>
+        @endif
+
+    </main>
 
 @endsection
+
+@push('styles')
+<style>
+    .ticker-track {
+        animation: ticker-scroll 50s linear infinite;
+        will-change: transform;
+    }
+    @keyframes ticker-scroll {
+        0%   { transform: translate3d(0, 0, 0); }
+        100% { transform: translate3d(-50%, 0, 0); }
+    }
+</style>
+@endpush

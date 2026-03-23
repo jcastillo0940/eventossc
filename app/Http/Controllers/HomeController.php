@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -23,6 +24,11 @@ class HomeController extends Controller
             ->orderBy('date', 'desc')
             ->get();
 
-        return view('home', compact('upcomingEvents', 'pastEvents'));
+        // Todas las marcas asociadas a al menos un evento, sin duplicados
+        $brands = Brand::whereHas('events')
+            ->orderBy('name')
+            ->get();
+
+        return view('home', compact('upcomingEvents', 'pastEvents', 'brands'));
     }
 }
