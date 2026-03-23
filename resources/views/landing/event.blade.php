@@ -3,17 +3,18 @@
 @section('title', $event->name . ' | Super Carnes Eventos')
 
 @section('content')
+@php 
+    $allPhotos = $event->getMedia('gallery_photos')->concat($event->getMedia('gallery')); 
+@endphp
+
 <div x-data="{ 
-    ...eventLanding('{{ $event->date->toISOString() }}'),
-    selectedPhoto: null,
-    closeLightbox() {
-        this.selectedPhoto = null;
-        document.body.style.overflow = 'auto';
-    }
-}" @keydown.escape.window="closeLightbox()">
+    ...eventLanding('{{ $event->date->toISOString() }}', @json($allPhotos->map(fn($m) => $m->getUrl())->values())),
+}" @keydown.escape.window="closeLightbox()"
+   @keydown.right.window="nextPhoto()"
+   @keydown.left.window="prevPhoto()">
 
     {{-- ===================== HERO ===================== --}}
-    <section class="relative h-[65vh] md:h-[85vh] flex items-end justify-center overflow-hidden">
+    <section class="relative min-h-screen flex items-end justify-center overflow-hidden">
 
         {{-- Banner --}}
         <div class="absolute inset-0 z-0">
@@ -402,11 +403,6 @@
         </section>
         @endif
 
-        {{-- GALERÍA COMPLETA --}}
-        @php 
-            $allPhotos = $event->getMedia('gallery_photos')->concat($event->getMedia('gallery')); 
-        @endphp
-        @if($allPhotos->count() > 0)
         <section id="full-gallery" class="space-y-12">
             <div class="text-center space-y-4">
                 <span class="text-xs font-black uppercase tracking-[0.3em] block text-sky-500">
@@ -420,10 +416,10 @@
                 </p>
             </div>
 
-            <div class="columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6">
-                @foreach($allPhotos as $photo)
-                    <div class="break-inside-avoid group relative rounded-[2rem] overflow-hidden bg-white shadow-lg cursor-zoom-in border border-slate-100"
-                         @click="selectedPhoto = '{{ $photo->getUrl() }}'; document.body.style.overflow = 'hidden';">
+            <div class="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-6 space-y-6">
+                @foreach($allPhotos as $index => $photo)
+                    <div class="break-inside-avoid group relative rounded-[2rem] overflow-hidden bg-white shadow-lg cursor-zoom-in border border-slate-100 mb-6"
+                         @click="openLightbox({{ $index }})">
                         <img src="{{ $photo->getUrl() }}" 
                              loading="lazy"
                              class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
@@ -451,16 +447,31 @@
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 scale-100"
              x-transition:leave-end="opacity-0 scale-95"
-             class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/95 backdrop-blur-md p-4 md:p-10"
+             class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/98 backdrop-blur-xl p-4 md:p-10"
              @click.self="closeLightbox()"
              style="display: none;">
             
-            <button @click="closeLightbox()" class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[110]">
+            {{-- Close --}}
+            <button @click="closeLightbox()" class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors z-[110] bg-black/20 p-2 rounded-full">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
 
+            {{-- Nav Arrows --}}
+            <button @click="prevPhoto()" class="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-all z-[110] bg-white/5 hover:bg-white/10 p-4 rounded-full backdrop-blur-md">
+                <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+
+            <button @click="nextPhoto()" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-all z-[110] bg-white/5 hover:bg-white/10 p-4 rounded-full backdrop-blur-md">
+                <svg class="w-8 h-8 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+            </button>
+
+            {{-- Image Info --}}
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/40 font-black text-xs uppercase tracking-widest z-[110]">
+                Imagen <span class="text-white" x-text="currentIndex + 1"></span> de <span class="text-white" x-text="allPhotos.length"></span>
+            </div>
+
             <img :src="selectedPhoto" 
-                 class="max-w-full max-h-full rounded-2xl md:rounded-[2rem] shadow-2xl object-contain border-4 border-white/10">
+                 class="max-w-full max-h-[85vh] rounded-2xl md:rounded-[1rem] shadow-2xl object-contain border-4 border-white/5 transition-all duration-300">
         </div>
 
     </main>
@@ -482,13 +493,18 @@
 
 @push('scripts')
 <script>
-function eventLanding(targetDate) {
+function eventLanding(targetDate, photosArr = []) {
     return {
         target: new Date(targetDate),
         countdown: { days: '00', hours: '00', minutes: '00', seconds: '00' },
         eventStarted: false,
         voting: false,
         fingerprint: null,
+        
+        // Lightbox
+        allPhotos: photosArr,
+        selectedPhoto: null,
+        currentIndex: null,
 
         async init() {
             const fp = await FingerprintJS.load();
@@ -510,6 +526,32 @@ function eventLanding(targetDate) {
             this.countdown.hours   = h.toString().padStart(2, '0');
             this.countdown.minutes = m.toString().padStart(2, '0');
             this.countdown.seconds = s.toString().padStart(2, '0');
+        },
+
+        openLightbox(index) {
+            this.currentIndex = index;
+            this.selectedPhoto = this.allPhotos[index];
+            document.body.style.overflow = 'hidden';
+        },
+
+        nextPhoto() {
+            if (this.currentIndex !== null) {
+                this.currentIndex = (this.currentIndex + 1) % this.allPhotos.length;
+                this.selectedPhoto = this.allPhotos[this.currentIndex];
+            }
+        },
+
+        prevPhoto() {
+            if (this.currentIndex !== null) {
+                this.currentIndex = (this.currentIndex - 1 + this.allPhotos.length) % this.allPhotos.length;
+                this.selectedPhoto = this.allPhotos[this.currentIndex];
+            }
+        },
+
+        closeLightbox() {
+            this.selectedPhoto = null;
+            this.currentIndex = null;
+            document.body.style.overflow = 'auto';
         },
 
         async castVote(participantId) {
