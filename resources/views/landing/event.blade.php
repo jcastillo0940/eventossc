@@ -107,6 +107,12 @@
 </script>
 @endpush
 
+{{-- ===================== STICKY SPONSOR TICKER (BOTTOM) ===================== --}}
+{{-- Spacer so page content is not hidden behind the fixed ticker --}}
+@if($event->brands->count() > 0)
+<div class="h-[58px] md:h-[66px]"></div>
+@endif
+
 <div x-data="eventLanding('{{ $event->date->toISOString() }}', window.eventPhotos)" 
      @keydown.escape.window="closeLightbox()"
      @keydown.right.window="nextPhoto()"
@@ -120,11 +126,9 @@
             @if($event->banner_path)
                 @php
                     $bannerUrl = $event->banner_path;
-                    // Si la ruta no tiene http/https, usamos secure_asset para forzar HTTPS
                     if (!str_starts_with($bannerUrl, 'http')) {
                         $bannerUrl = secure_asset('storage/' . ltrim($bannerUrl, '/'));
                     } else {
-                        // Si ya trae http://, lo forzamos a https:// para evitar el Mixed Content
                         $bannerUrl = str_replace('http://', 'https://', $bannerUrl);
                     }
                 @endphp
@@ -199,56 +203,6 @@
         </div>
     </section>
 
-    {{-- ===================== CARRUSEL SPONSORS ===================== --}}
-    @if($event->brands->count() > 0)
-    <div class="relative overflow-hidden py-5 border-b border-slate-200 group" style="background: #1A6FBF;">
-
-        {{-- Borde amarillo top --}}
-        <div class="absolute top-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
-
-        <div class="overflow-hidden">
-            <div class="flex items-center"
-                 style="animation: scroll 30s linear infinite; width: max-content; white-space: nowrap;">
-                @foreach($event->brands as $brand)
-                    <div class="shrink-0 flex items-center justify-center px-12">
-                        @php
-                            $logoUrl = $brand->logo_path;
-                            if (!str_starts_with($logoUrl, 'http')) {
-                                $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
-                            }
-                        @endphp
-                        <img src="{{ $logoUrl }}"
-                             class="h-10 md:h-12 w-auto object-contain transition-all duration-500"
-                             style="filter: brightness(0) invert(1); opacity: 0.7;"
-                             onmouseover="this.style.opacity='1'"
-                             onmouseout="this.style.opacity='0.7'"
-                             alt="{{ $brand->name }}">
-                    </div>
-                @endforeach
-                @foreach($event->brands as $brand)
-                    <div class="shrink-0 flex items-center justify-center px-12">
-                        @php
-                            $logoUrl = $brand->logo_path;
-                            if (!str_starts_with($logoUrl, 'http')) {
-                                $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
-                            }
-                        @endphp
-                        <img src="{{ $logoUrl }}"
-                             class="h-10 md:h-12 w-auto object-contain transition-all duration-500"
-                             style="filter: brightness(0) invert(1); opacity: 0.7;"
-                             onmouseover="this.style.opacity='1'"
-                             onmouseout="this.style.opacity='0.7'"
-                             alt="{{ $brand->name }}">
-                    </div>
-                @endforeach
-            </div>
-        </div>
-
-        {{-- Borde amarillo bottom --}}
-        <div class="absolute bottom-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
-    </div>
-    @endif
-
     {{-- ===================== MAIN CONTENT ===================== --}}
     <main class="max-w-7xl mx-auto px-4 py-32 space-y-48" style="background: #F0EDE8;">
 
@@ -299,7 +253,6 @@
                         ->filter(fn($m) => $m->getCustomProperty('highlight') === true)
                         ->take(3);
                     
-                    // Fallback to first 3 if no highlights are tagged yet
                     if($highlights->count() === 0) {
                         $highlights = $event->getMedia('gallery_photos')->take(3);
                     }
@@ -313,7 +266,6 @@
                     </div>
                     
                     @if($index == 0)
-                        {{-- Espacio para el botón de ir a la galería --}}
                         <a href="#full-gallery" class="aspect-square rounded-[2rem] flex items-center justify-center border-2 border-dashed border-slate-200 hover:border-sky-300 hover:bg-sky-50 transition-all group">
                             <span class="text-slate-300 group-hover:text-sky-500 font-black text-xs uppercase tracking-widest">Ver Galería</span>
                         </a>
@@ -383,7 +335,6 @@
                                 @php
                                     $photoUrl = $row['participant']->photo_path;
                                     if ($photoUrl && !str_starts_with($photoUrl, 'http')) {
-                                        // Aquí también aplicamos secure_asset para evitar el Mixed Content del que hablamos antes
                                         $photoUrl = secure_asset('storage/' . ltrim($photoUrl, '/'));
                                     } elseif ($photoUrl) {
                                         $photoUrl = str_replace('http://', 'https://', $photoUrl);
@@ -624,18 +575,141 @@
 
     </main>
 </div>
+
+{{-- ===================== STICKY SPONSOR TICKER ===================== --}}
+{{-- 
+    CAMBIOS APLICADOS:
+    1. fixed bottom-0 left-0 right-0  →  Cintillo fijo en la parte inferior de la pantalla
+    2. Animación de 60s (antes 30s)   →  Velocidad más lenta y cómoda
+    3. 4 copias del bloque de logos   →  Transición perfectamente continua, sin saltos ni blancos
+    4. Sin filter brightness/invert   →  Los logos muestran sus colores originales
+--}}
+@if($event->brands->count() > 0)
+<div class="fixed bottom-0 left-0 right-0 z-50 overflow-hidden py-4 border-t border-white/10 shadow-[0_-4px_32px_rgba(0,0,0,0.35)]"
+     style="background: #1A6FBF;">
+
+    {{-- Borde amarillo top --}}
+    <div class="absolute top-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
+
+    {{-- Fade masks left & right --}}
+    <div class="absolute inset-y-0 left-0 w-24 z-10 pointer-events-none"
+         style="background: linear-gradient(to right, #1A6FBF, transparent);"></div>
+    <div class="absolute inset-y-0 right-0 w-24 z-10 pointer-events-none"
+         style="background: linear-gradient(to left, #1A6FBF, transparent);"></div>
+
+    <div class="overflow-hidden">
+        {{-- 
+            Se usan 4 copias idénticas del listado de logos para garantizar que
+            la animación sea perfectamente continua: cuando la primera mitad
+            termina de desplazarse, la segunda mitad ya lleva exactamente el
+            mismo estado visual, por lo que el ojo nunca percibe un salto o vacío.
+            La duración de 60s (antes 30s) hace el movimiento más lento y legible.
+        --}}
+        <div class="flex items-center"
+             style="animation: ticker-scroll 60s linear infinite; width: max-content; white-space: nowrap;">
+
+            @php
+                // Construimos el listado de logos una sola vez y lo repetimos 4 veces en el blade
+                $tickerBrands = $event->brands;
+            @endphp
+
+            {{-- Copia 1 --}}
+            @foreach($tickerBrands as $brand)
+                <div class="shrink-0 flex items-center justify-center px-12">
+                    @php
+                        $logoUrl = $brand->logo_path;
+                        if (!str_starts_with($logoUrl, 'http')) {
+                            $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
+                        }
+                    @endphp
+                    <img src="{{ $logoUrl }}"
+                         class="h-8 md:h-10 w-auto object-contain transition-opacity duration-500"
+                         style="opacity: 0.85;"
+                         onmouseover="this.style.opacity='1'"
+                         onmouseout="this.style.opacity='0.85'"
+                         alt="{{ $brand->name }}">
+                </div>
+            @endforeach
+
+            {{-- Copia 2 --}}
+            @foreach($tickerBrands as $brand)
+                <div class="shrink-0 flex items-center justify-center px-12">
+                    @php
+                        $logoUrl = $brand->logo_path;
+                        if (!str_starts_with($logoUrl, 'http')) {
+                            $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
+                        }
+                    @endphp
+                    <img src="{{ $logoUrl }}"
+                         class="h-8 md:h-10 w-auto object-contain transition-opacity duration-500"
+                         style="opacity: 0.85;"
+                         onmouseover="this.style.opacity='1'"
+                         onmouseout="this.style.opacity='0.85'"
+                         alt="{{ $brand->name }}">
+                </div>
+            @endforeach
+
+            {{-- Copia 3 --}}
+            @foreach($tickerBrands as $brand)
+                <div class="shrink-0 flex items-center justify-center px-12">
+                    @php
+                        $logoUrl = $brand->logo_path;
+                        if (!str_starts_with($logoUrl, 'http')) {
+                            $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
+                        }
+                    @endphp
+                    <img src="{{ $logoUrl }}"
+                         class="h-8 md:h-10 w-auto object-contain transition-opacity duration-500"
+                         style="opacity: 0.85;"
+                         onmouseover="this.style.opacity='1'"
+                         onmouseout="this.style.opacity='0.85'"
+                         alt="{{ $brand->name }}">
+                </div>
+            @endforeach
+
+            {{-- Copia 4 --}}
+            @foreach($tickerBrands as $brand)
+                <div class="shrink-0 flex items-center justify-center px-12">
+                    @php
+                        $logoUrl = $brand->logo_path;
+                        if (!str_starts_with($logoUrl, 'http')) {
+                            $logoUrl = asset('storage/' . ltrim($logoUrl, '/'));
+                        }
+                    @endphp
+                    <img src="{{ $logoUrl }}"
+                         class="h-8 md:h-10 w-auto object-contain transition-opacity duration-500"
+                         style="opacity: 0.85;"
+                         onmouseover="this.style.opacity='1'"
+                         onmouseout="this.style.opacity='0.85'"
+                         alt="{{ $brand->name }}">
+                </div>
+            @endforeach
+
+        </div>
+    </div>
+
+    {{-- Borde amarillo bottom --}}
+    <div class="absolute bottom-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
+</div>
+@endif
+
 @endsection
 
 @push('styles')
 <style>
-    @keyframes scroll {
+    /* Animación del ticker de sponsors — reemplaza la anterior "scroll" */
+    @keyframes ticker-scroll {
         0%   { transform: translateX(0); }
         100% { transform: translateX(-50%); }
     }
+
+    /* Animación del banner hero */
     @keyframes subtle-zoom {
         0%   { transform: scale(1.05); }
         100% { transform: scale(1.12); }
     }
+
+    /* Galería masonry */
     .masonry-gallery {
         column-count: 2;
         column-gap: 1.5rem;

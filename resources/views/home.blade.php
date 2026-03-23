@@ -64,7 +64,7 @@
             <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
                 <div>
                     <span class="text-xs font-black uppercase tracking-[0.3em] mb-2 block" style="color: #1A6FBF;">
-                        ● PRÓXIMAS COMPETENCIAS
+                        ● PRÓXIMAMENTE
                     </span>
                     <h2 class="text-4xl md:text-5xl font-black text-slate-800 tracking-tight leading-tight">
                         ¡No te pierdas<br>
@@ -86,7 +86,7 @@
                         </svg>
                     </div>
                     <p class="text-slate-500 text-xl font-semibold">No hay eventos próximos en este momento.</p>
-                    <p class="text-slate-400 text-sm mt-2">¡Vuelve pronto para ver las nuevas competencias!</p>
+                    <p class="text-slate-400 text-sm mt-2">¡Vuelve pronto!</p>
                 </div>
 
             @else
