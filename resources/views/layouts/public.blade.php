@@ -99,12 +99,12 @@
         <div class="max-w-7xl mx-auto px-6 py-14">
             <div class="flex flex-col md:flex-row items-center justify-between gap-12">
                 
-                {{-- Logo Principal --}}
-                <div class="flex-none">
-                    <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png"
-                         alt="Super Carnes"
-                         class="h-20 w-auto object-contain brightness-0 invert">
-                </div>
+                {{-- Logo Principal (Color Original) --}}
+<div class="flex-none">
+    <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png"
+         alt="Super Carnes"
+         class="h-20 w-auto object-contain">
+</div>
 
                 {{-- Navegación Limpia --}}
                 <nav class="flex items-center gap-12">
