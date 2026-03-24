@@ -162,10 +162,20 @@
 
             {{-- Botones Hero --}}
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
-                <a href="#about" 
-                   class="px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-xl bg-white text-sky-900 w-full sm:w-auto">
-                    Ver más detalles
-                </a>
+                @if($event->brands->count() > 0)
+                    <a href="#sponsors" 
+                       class="px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-xl bg-white text-sky-900 w-full sm:w-auto">
+                        Marcas Aliadas
+                    </a>
+                @endif
+                
+                @if($allPhotos->count() > 0)
+                    <a href="#full-gallery" 
+                       class="px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all transform hover:scale-105 active:scale-95 shadow-xl bg-amber-500 text-white w-full sm:w-auto border-b-4 border-amber-700">
+                        Ver Galería
+                    </a>
+                @endif
+
                 <a href="{{ route('home') }}" 
                    class="px-8 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all border border-white/30 text-white hover:bg-white/10 w-full sm:w-auto">
                     Regresar a inicio
@@ -199,7 +209,7 @@
 
     {{-- ===================== CARRUSEL SPONSORS (debajo del hero, desaparece con el scroll) ===================== --}}
     @if($event->brands->count() > 0)
-    <div class="relative overflow-hidden py-4" style="background: #1A6FBF;">
+    <div id="sponsors" class="relative overflow-hidden py-4" style="background: #1A6FBF;">
 
         {{-- Borde amarillo top --}}
         <div class="absolute top-0 left-0 right-0 h-[3px]" style="background: #F5C400;"></div>
@@ -586,6 +596,14 @@
              @click.self="closeLightbox()"
              style="display: none;">
             
+            {{-- Download --}}
+            <a :href="selectedPhoto" 
+               download
+               class="absolute top-6 left-6 text-white/50 hover:text-white transition-all z-[120] bg-white/10 hover:bg-white/20 p-3 rounded-full backdrop-blur-md border border-white/10 group flex items-center gap-2 pr-6">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <span class="text-[10px] font-black uppercase tracking-widest">Descargar Foto</span>
+            </a>
+
             {{-- Close --}}
             <button @click="closeLightbox()" class="absolute top-6 right-6 text-white/50 hover:text-white transition-all z-[120] bg-white/10 hover:bg-white/20 p-3 rounded-full backdrop-blur-md border border-white/10 group">
                 <svg class="w-8 h-8 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
