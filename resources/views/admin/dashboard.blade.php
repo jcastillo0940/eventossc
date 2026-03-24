@@ -50,7 +50,7 @@
                             @foreach($recentEvents as $event)
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-6 py-6 font-bold truncate max-w-[200px] uppercase">{{ $event->name }}</td>
-                                    <td class="px-6 py-6 text-slate-500 text-sm italic italic">{{ $event->date->format('d/m/Y') }}</td>
+                                    <td class="px-6 py-6 text-slate-500 text-sm italic italic">{{ $event->getFormattedDate() }}</td>
                                     <td class="px-6 py-6 text-xs">
                                         <span class="px-3 py-1 bg-emerald-100 text-emerald-700 font-black rounded-full uppercase italic tracking-tighter">Activo</span>
                                     </td>

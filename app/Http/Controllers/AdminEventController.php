@@ -35,7 +35,8 @@ class AdminEventController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'date' => 'required|date',
+            'date' => 'nullable|date',
+            'date_display_mode' => 'required|string|in:full,month_year,tba',
             'description' => 'nullable|string',
             'is_active' => 'nullable|string',
             'is_published' => 'nullable|string',
@@ -47,6 +48,7 @@ class AdminEventController extends Controller
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
             'date' => $validated['date'],
+            'date_display_mode' => $validated['date_display_mode'],
             'description' => $validated['description'],
             'is_active' => $request->has('is_active'),
             'is_published' => $request->has('is_published'),
@@ -94,17 +96,19 @@ class AdminEventController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'date' => 'required|date',
+            'date' => 'nullable|date',
+            'date_display_mode' => 'required|string|in:full,month_year,tba',
             'description' => 'nullable|string',
         ]);
 
         $event->update([
-            'name'         => $validated['name'],
-            'slug'         => Str::of($validated['name'])->slug(),
-            'date'         => $validated['date'],
-            'description'  => $validated['description'],
-            'is_active'    => $request->has('is_active'),
-            'is_published' => $request->has('is_published'),
+            'name'              => $validated['name'],
+            'slug'              => Str::of($validated['name'])->slug(),
+            'date'              => $validated['date'],
+            'date_display_mode' => $validated['date_display_mode'],
+            'description'       => $validated['description'],
+            'is_active'         => $request->has('is_active'),
+            'is_published'      => $request->has('is_published'),
         ]);
 
         // Settings 

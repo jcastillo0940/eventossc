@@ -13,9 +13,9 @@
     
     function eventLanding(targetDate, photosArr = []) {
         return {
-            target: new Date(targetDate),
+            target: targetDate ? new Date(targetDate) : null,
             countdown: { days: '00', hours: '00', minutes: '00', seconds: '00' },
-            eventStarted: false,
+            eventStarted: !targetDate,
             voting: false,
             fingerprint: null,
             allPhotos: photosArr,
@@ -33,6 +33,7 @@
             },
 
             updateCountdown() {
+                if (!this.target) return;
                 const now = new Date();
                 const diff = this.target - now;
                 if (diff <= 0) { this.eventStarted = true; return; }
@@ -107,7 +108,7 @@
 </script>
 @endpush
 
-<div x-data="eventLanding('{{ $event->date->toISOString() }}', window.eventPhotos)" 
+<div x-data="eventLanding('{{ $event->date ? $event->date->toISOString() : '' }}', window.eventPhotos)" 
      @keydown.escape.window="closeLightbox()"
      @keydown.right.window="nextPhoto()"
      @keydown.left.window="prevPhoto()">
@@ -157,7 +158,7 @@
             </h1>
 
             <p class="text-base md:text-2xl font-bold uppercase tracking-[0.2em]" style="color: #F5C400;">
-                {{ $event->date->format('d M, Y') }} · {{ $event->date->format('g:i a') }}
+                {{ $event->getFullFormattedDate() }}
             </p>
 
             {{-- Botones Hero --}}
@@ -183,7 +184,7 @@
             </div>
 
             {{-- Countdown --}}
-            <template x-if="!eventStarted">
+            <template x-if="!eventStarted && '{{ $event->date_display_mode }}' == 'full'">
                 <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-sm mx-auto mt-6 p-5 rounded-[2rem] border border-white/10"
                      style="background: rgba(255,255,255,0.08); backdrop-filter: blur(16px);">
                     <div class="text-center">
@@ -286,7 +287,7 @@
                     @endif
 
                     <div class="shrink-0 text-center sm:text-left">
-                        <span class="text-2xl sm:text-4xl font-black block" style="color: #F5C400;">{{ $event->date->format('Y') }}</span>
+                        <span class="text-2xl sm:text-4xl font-black block" style="color: #F5C400;">{{ $event->date ? $event->date->format('Y') : '---' }}</span>
                         <span class="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">Edición</span>
                     </div>
                 </div>

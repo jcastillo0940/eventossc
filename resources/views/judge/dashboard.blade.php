@@ -29,7 +29,7 @@
                         @endif
                         <div>
                             <h3 class="text-xl font-bold text-slate-800 uppercase italic italic tracking-tight mb-1">{{ $event->name }}</h3>
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $event->date->format('d M, Y') }}</span>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">{{ $event->getFormattedDate() }}</span>
                         </div>
                     </div>
                     

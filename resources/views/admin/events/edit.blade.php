@@ -14,14 +14,25 @@
         @method('PUT')
         
         <div class="dashboard-card p-10 space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="grid grid-cols-1 gap-10">
                 <div class="space-y-2">
                     <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Nombre del Evento</label>
                     <input type="text" name="name" required value="{{ $event->name }}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all">
                 </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div class="space-y-2">
-                    <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Fecha y Hora</label>
-                    <input type="datetime-local" name="date" required value="{{ $event->date->format('Y-m-d\TH:i') }}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all">
+                    <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Fecha y Hora (Opcional)</label>
+                    <input type="datetime-local" name="date" value="{{ $event->date ? $event->date->format('Y-m-d\TH:i') : '' }}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest block">Formato de Fecha</label>
+                    <select name="date_display_mode" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all">
+                        <option value="full" {{ $event->date_display_mode == 'full' ? 'selected' : '' }}>Día/Mes/Año + Hora</option>
+                        <option value="month_year" {{ $event->date_display_mode == 'month_year' ? 'selected' : '' }}>Solo Mes y Año</option>
+                        <option value="tba" {{ $event->date_display_mode == 'tba' ? 'selected' : '' }}>Próximamente (TBD)</option>
+                    </select>
                 </div>
             </div>
 

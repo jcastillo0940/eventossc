@@ -17,6 +17,7 @@ class Event extends Model implements HasMedia
         'name',
         'slug',
         'date',
+        'date_display_mode',
         'description',
         'logo_path',
         'banner_path',
@@ -127,5 +128,31 @@ class Event extends Model implements HasMedia
             ['key' => 'revealed_positions'],
             ['value' => '[]']
         );
+    }
+
+    public function getFormattedDate(): string
+    {
+        if ($this->date_display_mode === 'tba' || !$this->date) {
+            return 'Próximamente';
+        }
+
+        if ($this->date_display_mode === 'month_year') {
+            return ucfirst($this->date->translatedFormat('F Y'));
+        }
+
+        return $this->date->translatedFormat('d M, Y');
+    }
+
+    public function getFullFormattedDate(): string
+    {
+        if ($this->date_display_mode === 'tba' || !$this->date) {
+            return 'Próximamente';
+        }
+
+        if ($this->date_display_mode === 'month_year') {
+            return ucfirst($this->date->translatedFormat('F Y'));
+        }
+
+        return $this->date->translatedFormat('d M, Y') . ' · ' . $this->date->format('g:i a');
     }
 }

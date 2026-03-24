@@ -33,7 +33,7 @@
                     <div class="p-8 pt-10 flex-grow space-y-6">
                         <div>
                             <h3 class="text-xl font-black text-slate-900 uppercase italic truncate tracking-tighter">{{ $event->name }}</h3>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{{ $event->date->format('d M, Y') }}</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{{ $event->getFormattedDate() }}</p>
                         </div>
                         
                         <div class="flex flex-col gap-3">

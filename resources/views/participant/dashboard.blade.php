@@ -42,7 +42,7 @@
                         </div>
                         <div class="space-y-1">
                             <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Fecha de Presentación</span>
-                            <span class="text-lg font-bold text-slate-800">{{ $participantProfile->event->date->format('d/m/Y H:i') }}</span>
+                            <span class="text-lg font-bold text-slate-800">{{ $participantProfile->event->getFullFormattedDate() }}</span>
                         </div>
                     </div>
                 </div>

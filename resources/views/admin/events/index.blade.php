@@ -47,7 +47,7 @@
                                 </div>
                             </td>
                             <td class="px-8 py-6">
-                                <div class="text-sm font-bold text-slate-700 italic italic">{{ $event->date->format('d M, Y') }}</div>
+                                <div class="text-sm font-bold text-slate-700 italic italic">{{ $event->getFormattedDate() }}</div>
                                 <div class="text-[10px] text-sky-500 font-medium truncate max-w-[150px]">/eventos/{{ $event->slug }}</div>
                             </td>
                             <td class="px-8 py-6">

@@ -145,7 +145,7 @@
                                         </svg>
                                     </div>
                                     <span class="text-xs font-black uppercase tracking-widest text-slate-500">
-                                        {{ $event->date->format('d M, Y') }} · {{ $event->date->format('H:i') }}
+                                        {{ $event->getFullFormattedDate() }}
                                     </span>
                                 </div>
 
@@ -228,7 +228,7 @@
 
                         <div class="absolute bottom-5 left-5 right-5">
                             <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1 block">
-                                {{ $event->date->format('Y') }}
+                                {{ $event->date ? $event->date->format('Y') : '' }}
                             </span>
                             <h3 class="text-lg font-black text-white line-clamp-1 group-hover:text-yellow-400 transition-colors">
                                 {{ $event->name }}
