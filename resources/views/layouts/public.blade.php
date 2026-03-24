@@ -134,45 +134,49 @@
         @yield('content')
     </div>
 
-    {{-- ===================== FOOTER MEJORADO ===================== --}}
+    {{-- ===================== FOOTER REDISEÑADO Y ELEGANTE ===================== --}}
     <footer style="background: var(--sc-blue);" class="mt-0">
         <div class="max-w-7xl mx-auto px-6 py-12">
+            
+            {{-- Sección Superior: Logo Grande y Navegación --}}
             <div class="flex flex-col md:flex-row items-center justify-between gap-10">
-
-                {{-- Logo y Propósito --}}
-                <div class="flex flex-col items-center md:items-start gap-2">
+                
+                {{-- Logo del Toro de Super Carnes (Protagonista) --}}
+                <div class="flex-none">
                     <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png"
                          alt="Super Carnes"
-                         class="h-10 object-contain brightness-0 invert">
-                    <p class="text-white/40 text-[10px] font-bold tracking-[0.2em] uppercase">
-                        Eventos
-                    </p>
+                         class="h-20 w-auto object-contain">
                 </div>
 
-                {{-- Enlaces Rápidos --}}
-                <nav class="flex items-center gap-10">
-                    <a href="{{ route('home') }}" class="text-white/70 hover:text-white text-sm font-medium transition-colors">
+                {{-- Navegación con Espaciado Elegante --}}
+                <nav class="flex items-center gap-12">
+                    <a href="{{ route('home') }}" class="text-white/80 hover:text-white text-base font-medium transition-colors">
                         Inicio
                     </a>
-                    <a href="{{ route('home') }}#upcoming" class="text-white/70 hover:text-white text-sm font-medium transition-colors">
+                    <a href="{{ route('home') }}#upcoming" class="text-white/80 hover:text-white text-base font-medium transition-colors">
                         Eventos
                     </a>
                 </nav>
 
-                {{-- Copyright --}}
+                {{-- Copyright con Estilo Minimalista --}}
                 <div class="text-center md:text-right">
-                    <p class="text-white/50 text-xs font-semibold">
+                    <p class="text-white/70 text-sm font-semibold">
                         Super Carnes S.A. &copy; {{ date('Y') }}
                     </p>
-                    <p class="text-white/30 text-[11px] mt-1">
-                        Todos los derechos reservados.
+                    <p class="text-white/50 text-xs mt-1">
+                        Derechos Reservados
                     </p>
                 </div>
 
             </div>
 
-            {{-- Línea de Cierre y Crédito --}}
-            <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            {{-- Línea Divisoria Sutil --}}
+            <div class="mt-12 mb-8 border-t border-white/10"></div>
+
+            {{-- Sección Inferior: Créditos --}}
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                
+                {{-- Marcador de Ubicación --}}
                 <div class="flex items-center gap-3">
                     <span class="w-1.5 h-1.5 rounded-full" style="background: var(--sc-yellow);"></span>
                     <span class="text-white/30 text-[10px] font-bold tracking-widest uppercase">
@@ -180,10 +184,11 @@
                     </span>
                 </div>
                 
-                <a href="#" class="group flex items-center gap-1.5 no-underline">
-                    <span class="text-white/20 text-[11px] transition-colors group-hover:text-white/40">Powered by</span>
-                    <span class="text-white/40 text-[11px] font-bold transition-colors group-hover:text-white/60">Innova360</span>
-                </a>
+                {{-- Crédito a Innova360 --}}
+                <div class="text-white/20 text-xs font-light">
+                    Powered by <span class="text-white/40 font-bold ml-1">Innova360</span>
+                </div>
+
             </div>
         </div>
     </footer>
