@@ -134,59 +134,56 @@
         @yield('content')
     </div>
 
-    {{-- ===================== FOOTER ===================== --}}
+    {{-- ===================== FOOTER MEJORADO ===================== --}}
     <footer style="background: var(--sc-blue);" class="mt-0">
-        <div class="max-w-7xl mx-auto px-4 py-14">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="max-w-7xl mx-auto px-6 py-12">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-10">
 
-                {{-- Logo y tagline --}}
-                <div class="flex flex-col items-center md:items-start gap-3">
+                {{-- Logo y Propósito --}}
+                <div class="flex flex-col items-center md:items-start gap-2">
                     <img src="https://eventos.supercarnes.com/storage/14/logo-super-carnes.png"
                          alt="Super Carnes"
-                         class="h-12 object-contain brightness-0 invert opacity-90">
-                    <p class="text-white/50 text-xs font-medium tracking-widest uppercase">
-                        Plataforma de Eventos y Competencias
+                         class="h-10 object-contain brightness-0 invert">
+                    <p class="text-white/40 text-[10px] font-bold tracking-[0.2em] uppercase">
+                        Eventos
                     </p>
                 </div>
 
-                {{-- Links --}}
-                <div class="flex items-center gap-8">
-                    <a href="{{ route('home') }}" class="text-white/60 hover:text-white text-sm font-semibold transition-colors">
+                {{-- Enlaces Rápidos --}}
+                <nav class="flex items-center gap-10">
+                    <a href="{{ route('home') }}" class="text-white/70 hover:text-white text-sm font-medium transition-colors">
                         Inicio
                     </a>
-                    <a href="{{ route('home') }}#upcoming" class="text-white/60 hover:text-white text-sm font-semibold transition-colors">
+                    <a href="{{ route('home') }}#upcoming" class="text-white/70 hover:text-white text-sm font-medium transition-colors">
                         Eventos
                     </a>
-                    @auth
-                        <a href="{{ route('admin.dashboard') }}" class="text-white/60 hover:text-white text-sm font-semibold transition-colors">
-                            Admin
-                        </a>
-                    @endauth
-                </div>
+                </nav>
 
                 {{-- Copyright --}}
                 <div class="text-center md:text-right">
-                    <p class="text-white/40 text-xs font-medium">
+                    <p class="text-white/50 text-xs font-semibold">
                         Super Carnes S.A. &copy; {{ date('Y') }}
                     </p>
-                    <p class="text-white/30 text-xs mt-1">
+                    <p class="text-white/30 text-[11px] mt-1">
                         Todos los derechos reservados.
                     </p>
                 </div>
 
             </div>
 
-            {{-- Línea divisoria --}}
+            {{-- Línea de Cierre y Crédito --}}
             <div class="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full animate-pulse" style="background: var(--sc-yellow);"></span>
-                    <span class="text-white/40 text-xs font-medium tracking-wider uppercase">
-                        Sistema de Eventos en Vivo
+                <div class="flex items-center gap-3">
+                    <span class="w-1.5 h-1.5 rounded-full" style="background: var(--sc-yellow);"></span>
+                    <span class="text-white/30 text-[10px] font-bold tracking-widest uppercase">
+                        Panamá
                     </span>
                 </div>
-                <p class="text-white/20 text-xs">
-                    Powered by Super Carnes
-                </p>
+                
+                <a href="#" class="group flex items-center gap-1.5 no-underline">
+                    <span class="text-white/20 text-[11px] transition-colors group-hover:text-white/40">Powered by</span>
+                    <span class="text-white/40 text-[11px] font-bold transition-colors group-hover:text-white/60">Innova360</span>
+                </a>
             </div>
         </div>
     </footer>

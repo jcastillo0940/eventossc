@@ -279,7 +279,7 @@
             <div class="mt-16 text-center">
                 <p class="text-slate-400 text-xs font-medium max-w-lg mx-auto leading-relaxed uppercase tracking-widest italic">
                     ¿Quieres que tu marca esté presente en nuestros próximos eventos? <br>
-                    <a href="https://wa.link/c5wzcs" class="font-black hover:underline mt-2 inline-block" style="color: #1A6FBF;">Contáctanos aquí</a>
+                    <a href="https://wa.link/rmkr10" class="font-black hover:underline mt-2 inline-block" style="color: #1A6FBF;">Contáctanos aquí</a>
                 </p>
             </div>
         </section>
